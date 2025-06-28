@@ -34,7 +34,8 @@ class TeamScreen extends HookWidget {
           id: 'alfredo-delgadillo',
           name: 'Lic. Alfredo Delgadillo López',
           title: 'Fundador y Director General',
-          imageUrl: '', // Reemplazar con URL de alfredo-delgadillo-lopez.jpg
+          imageUrl:
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/master/assets/images/alfredo-delgadillo-lopez.jpg',
           location: 'Ciudad de México',
           type: MemberType.lawyer,
           specialties: [
@@ -77,7 +78,8 @@ Su visión innovadora lo ha llevado a ser columnista en diversos periódicos nac
           id: 'luis-humberto-delgadillo',
           name: 'Dr. Luís Humberto Delgadillo Gutiérrez',
           title: 'Asesor y Consultor Jurídico Senior',
-          imageUrl: '', // Reemplazar con URL de luis-delgadillo-gutierrez.jpg
+          imageUrl:
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/master/assets/images/luis-delgadillo-gutierrez.jpg',
           location: 'Ciudad de México',
           type: MemberType.lawyer,
           specialties: [
@@ -136,7 +138,7 @@ Su excelencia profesional le valió obtener el premio INAP en 1989. Actualmente 
           name: 'Dr. Jaime Rodríguez-Arana Muñoz',
           title: 'Consejero Académico Internacional',
           imageUrl:
-              'https://www.udc.es/grupos/derechopublicoglobal/wp-content/uploads/2020/09/Jaime-Rodriguez-Arana-2-scaled.jpg',
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/master/assets/images/jaime-rodriguez-arana.jpg',
           location: 'A Coruña, España',
           type: MemberType.lawyer,
           specialties: [
@@ -190,7 +192,7 @@ Es miembro de las más distinguidas academias jurídicas, incluyendo la Real Aca
           name: 'Dra. Míriam Mabel Ivanega',
           title: 'Consejera Académica Internacional',
           imageUrl:
-              'https://www.foroiberoamericano.org/wp-content/uploads/2020/07/miriam-ivanega-2-300x300.jpg',
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/refs/heads/master/assets/images/miriam-ivanega.jpg',
           location: 'Buenos Aires, Argentina',
           type: MemberType.lawyer,
           specialties: [
@@ -236,7 +238,7 @@ Como una de las figuras fundadoras del Foro Iberoamericano de Derecho Administra
           name: 'Dr. Luís José Béjar Rivera',
           title: 'Profesor e Investigador | Consejero Internacional',
           imageUrl:
-              'https://www.ubishops.ca/wp-content/uploads/luis-bejar-rivera-300x300.jpg',
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/master/assets/images/luis-bejar-rivera.jpg',
           location: 'Sherbrooke, Quebec, Canadá',
           type: MemberType.lawyer,
           specialties: [
@@ -284,7 +286,8 @@ Actualmente adscrito al Departamento de Política y Estudios Internacionales de 
           id: 'raul-rosales',
           name: 'Raúl Rosales Rosas',
           title: 'Consultor Senior en Derecho Público',
-          imageUrl: '', // Reemplazar con URL de raul-rosales-rosas.jpg
+          imageUrl:
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/refs/heads/master/assets/images/raul_rosales_rosas.jpg',
           location: 'Nayarit, México',
           type: MemberType.lawyer,
           specialties: [

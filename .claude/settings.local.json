@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter pub:*)",
+      "Bash(/mnt/e/Development/SDKs/flutter/bin/flutter pub get)",
+      "Bash(dart pub:*)",
+      "Bash(bash -c \"flutter pub get\")",
+      "Bash(find:*)",
+      "Bash(/mnt/e/Development/SDKs/flutter/bin/cache/dart-sdk/bin/dart.exe pub get)",
+      "Bash(cmd.exe:*)",
+      "Bash(awk:*)",
+      "Bash(/mnt/e/Development/SDKs/flutter/bin/flutter run -d chrome --web-port=8080)",
+      "Bash(flutter run:*)",
+      "Bash(nc localhost 58350)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

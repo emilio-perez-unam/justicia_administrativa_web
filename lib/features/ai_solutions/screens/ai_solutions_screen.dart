@@ -3,7 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:justicia_administrativa_web/core/constants/colors.dart';
 import 'package:justicia_administrativa_web/core/constants/spacing.dart';
 import 'package:justicia_administrativa_web/core/constants/typography.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:justicia_administrativa_web/shared/widgets/responsive_layout.dart';
+
 
 import '../models/ai_solution.dart';
 
@@ -27,7 +28,7 @@ class _AiSolutionsScreenState extends State<AiSolutionsScreen> {
         'Redacción de Documentos: Genera borradores de escritos legales con fundamentos jurídicos.',
         'Análisis Predictivo: Evalúa probabilidades de éxito basado en casos similares.',
       ],
-      demoImageAsset: 'assets/images/demo_justicia_gpt.png',
+      demoImageAsset: 'images/hero_background.png',
       supportedFormats: ['94% Precisión'],
       callToAction: 'Ver Documentación Completa',
     ),
@@ -41,7 +42,7 @@ class _AiSolutionsScreenState extends State<AiSolutionsScreen> {
         'Due Diligence: Procesa miles de documentos para auditorías y transacciones.',
         'Extracción de Datos: Obtiene información estructurada de documentos no estructurados.',
       ],
-      demoImageAsset: 'assets/images/nlp.jpg', // <-- CHANGE: Updated image path
+      demoImageAsset: 'images/nlp.jpg', // <-- CHANGE: Updated image path
       supportedFormats: ['PDF', 'DOCX', 'TXT', 'HTML', 'JPG/PNG (OCR)'],
       callToAction: 'Solicitar Demostración',
     ),
@@ -55,7 +56,7 @@ class _AiSolutionsScreenState extends State<AiSolutionsScreen> {
         'Análisis de Impacto: Evaluación automática del impacto de nuevas normativas.',
         'Seguimiento Legislativo: Monitoreo de iniciativas desde su propuesta hasta su aprobación.',
       ],
-      demoImageAsset: 'assets/images/demo_compliance_ai.png',
+      demoImageAsset: 'images/nlp.jpg',
       supportedFormats: ['API REST', 'Webhooks', 'Email Digest', 'Slack/Teams'],
       callToAction: 'Ver Fuentes Monitoreadas',
     ),
@@ -96,9 +97,20 @@ class _AiSolutionsScreenState extends State<AiSolutionsScreen> {
 class _HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ResponsiveLayout(
+      mobile: _HeroSectionMobile(),
+      tablet: _HeroSectionTablet(),
+      desktop: _HeroSectionDesktop(),
+    );
+  }
+}
+
+class _HeroSectionDesktop extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
       width: double.infinity,
-      height: 600,
+      height: 600, // Keep fixed height for desktop
       child: Stack(
         children: [
           // Imagen de fondo
@@ -117,8 +129,8 @@ class _HeroSection extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.8),
-                  Colors.black.withOpacity(0.6),
+                  Colors.black.withAlpha(204),
+                  Colors.black.withAlpha(153),
                 ],
               ),
             ),
@@ -135,7 +147,7 @@ class _HeroSection extends StatelessWidget {
                     Text(
                       'Derecho sin IA te convierte en obsoleto',
                       textAlign: TextAlign.center,
-                      style: AppTypography.displayLarge.copyWith(
+                      style: AppTypography.displayLarge(context).copyWith(
                         color: Colors.white,
                         height: 1.2,
                       ),
@@ -144,7 +156,7 @@ class _HeroSection extends StatelessWidget {
                     Text(
                       'Nuestras soluciones de inteligencia artificial transforman la práctica legal en México, combinando la experiencia jurídica con tecnología de vanguardia para ofrecer resultados más rápidos, precisos y accesibles.',
                       textAlign: TextAlign.center,
-                      style: AppTypography.bodyLarge.copyWith(
+                      style: AppTypography.bodyLarge(context).copyWith(
                         color: Colors.white.withAlpha(230),
                       ),
                     ),
@@ -194,6 +206,210 @@ class _HeroSection extends StatelessWidget {
   }
 }
 
+class _HeroSectionTablet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 400, // Adjusted height for tablet
+      child: Stack(
+        children: [
+          // Imagen de fondo
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage('assets/images/hero_background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // Overlay oscuro más pronunciado
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withAlpha(204),
+                  Colors.black.withAlpha(153),
+                ],
+              ),
+            ),
+          ),
+          // Contenido
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.pagePadding),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Derecho sin IA te convierte en obsoleto',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.displayLarge(context).copyWith(
+                        color: Colors.white,
+                        height: 1.2,
+                        fontSize: 48, // Adjusted font size for tablet
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Text(
+                      'Nuestras soluciones de inteligencia artificial transforman la práctica legal en México, combinando la experiencia jurídica con tecnología de vanguardia para ofrecer resultados más rápidos, precisos y accesibles.',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyLarge(context).copyWith(
+                        color: Colors.white.withAlpha(230),
+                        fontSize: 18, // Adjusted font size for tablet
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    Wrap(
+                      spacing: AppSpacing.lg,
+                      runSpacing: AppSpacing.md,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.accentGold,
+                            foregroundColor: AppColors.primaryNavy,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.xl,
+                              vertical: AppSpacing.lg,
+                            ),
+                          ),
+                          child: const Text('Ver Demos Interactivos'),
+                        ),
+                        OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.xl,
+                              vertical: AppSpacing.lg,
+                            ),
+                          ),
+                          child: const Text('Solicitar Prueba Gratuita'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroSectionMobile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 300, // Adjusted height for mobile
+      child: Stack(
+        children: [
+          // Imagen de fondo
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage('assets/images/hero_background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // Overlay oscuro más pronunciado
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withAlpha(204),
+                  Colors.black.withAlpha(153),
+                ],
+              ),
+            ),
+          ),
+          // Contenido
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.pagePadding),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Derecho sin IA te convierte en obsoleto',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.displayLarge(context).copyWith(
+                        color: Colors.white,
+                        height: 1.2,
+                        fontSize: 32, // Adjusted font size for mobile
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Text(
+                      'Nuestras soluciones de inteligencia artificial transforman la práctica legal en México, combinando la experiencia jurídica con tecnología de vanguardia para ofrecer resultados más rápidos, precisos y accesibles.',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyLarge(context).copyWith(
+                        color: Colors.white.withAlpha(230),
+                        fontSize: 16, // Adjusted font size for mobile
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    Column( // Changed to Column for mobile buttons
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.accentGold,
+                            foregroundColor: AppColors.primaryNavy,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.xl,
+                              vertical: AppSpacing.lg,
+                            ),
+                          ),
+                          child: const Text('Ver Demos Interactivos'),
+                        ),
+                        const SizedBox(height: AppSpacing.md), // Added vertical spacing
+                        OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.xl,
+                              vertical: AppSpacing.lg,
+                            ),
+                          ),
+                          child: const Text('Solicitar Prueba Gratuita'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SolutionsIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -210,7 +426,7 @@ class _SolutionsIntro extends StatelessWidget {
               Text(
                 'Nuestras Soluciones Tecnológicas',
                 textAlign: TextAlign.center,
-                style: AppTypography.headingLarge.copyWith(
+                style: AppTypography.headingLarge(context).copyWith(
                   color: AppColors.primaryNavy,
                 ),
               ),
@@ -218,7 +434,7 @@ class _SolutionsIntro extends StatelessWidget {
               Text(
                 'Herramientas de IA desarrolladas por expertos en derecho administrativo y tecnologías digitales que diseñamos y personalizamos para tus necesidades específicas',
                 textAlign: TextAlign.center,
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.bodyMedium(context).copyWith(
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -253,14 +469,14 @@ class _SolutionCard extends StatelessWidget {
               ),
             ],
           ),
-          child: ScreenTypeLayout.builder(
-            mobile: (BuildContext context) => Column(
+          child: ResponsiveLayout(
+            mobile: Column(
               children: [
                 _LeftContent(solution: solution),
                 _RightContent(solution: solution, isMobile: true),
               ],
             ),
-            tablet: (BuildContext context) => Row(
+            tablet: Row( // Tablet layout can be similar to desktop or a modified row
               children: [
                 Expanded(flex: 5, child: _LeftContent(solution: solution)),
                 Expanded(
@@ -269,7 +485,7 @@ class _SolutionCard extends StatelessWidget {
                 ),
               ],
             ),
-            desktop: (BuildContext context) => Row(
+            desktop: Row(
               children: [
                 Expanded(flex: 5, child: _LeftContent(solution: solution)),
                 Expanded(
@@ -301,17 +517,17 @@ class _LeftContent extends StatelessWidget {
             children: [
               Icon(solution.icon, color: AppColors.techBlue, size: 36),
               const SizedBox(width: AppSpacing.md),
-              Text(solution.title, style: AppTypography.headingMedium),
+              Text(solution.title, style: AppTypography.headingMedium(context)),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          Text(solution.description, style: AppTypography.bodyMedium),
+          Text(solution.description, style: AppTypography.bodyMedium(context)),
           const SizedBox(height: AppSpacing.xl),
           ...solution.features.map((feature) => _FeatureBullet(text: feature)),
           const SizedBox(height: AppSpacing.xl),
           Text(
             'Soportado:',
-            style: AppTypography.bodyMedium.copyWith(
+            style: AppTypography.bodyMedium(context).copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -324,7 +540,7 @@ class _LeftContent extends StatelessWidget {
                   (format) => Chip(
                     label: Text(format),
                     backgroundColor: AppColors.background,
-                    labelStyle: AppTypography.bodySmall,
+                    labelStyle: AppTypography.bodySmall(context),
                     visualDensity: VisualDensity.compact,
                   ),
                 )
@@ -411,7 +627,7 @@ class _FeatureBullet extends StatelessWidget {
           Expanded(
             child: RichText(
               text: TextSpan(
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.bodyMedium(context).copyWith(
                   color: AppColors.textSecondary,
                 ),
                 children: [

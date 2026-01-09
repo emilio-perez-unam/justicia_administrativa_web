@@ -9,7 +9,7 @@ class EmailService {
     required String message, // AGREGADO
   }) async {
     try {
-      print('Enviando formulario...');
+      
 
       final response = await http.post(
         Uri.parse('https://justiciadministrativa.com/send_email.php'),
@@ -25,8 +25,8 @@ class EmailService {
         }),
       );
 
-      print('Respuesta status: ${response.statusCode}');
-      print('Respuesta body: ${response.body}');
+      
+      
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
@@ -34,7 +34,7 @@ class EmailService {
       }
       return false;
     } catch (e) {
-      print('Error detallado: $e');
+      
       return false;
     }
   }

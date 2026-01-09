@@ -4,7 +4,8 @@ import 'package:justicia_administrativa_web/core/constants/colors.dart';
 import 'package:justicia_administrativa_web/core/constants/spacing.dart';
 import 'package:justicia_administrativa_web/core/constants/typography.dart';
 import 'package:justicia_administrativa_web/features/publications/models/publication.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:justicia_administrativa_web/shared/widgets/responsive_layout.dart';
+
 
 // --- MOCK DATA LAYER ---
 // In a real app, this would come from a service or API
@@ -17,13 +18,13 @@ const _alfredo = Author(
 const _maria = Author(
   name: 'Lic. María Rodríguez',
   title: 'Socia, Litigio Administrativo',
-  imageUrl: 'assets/images/placeholder.png',
+  imageUrl: 'images/placeholder.png',
 );
 
 const _carlos = Author(
   name: 'Ing. Carlos Mendoza',
   title: 'Director, División Tecnológica',
-  imageUrl: 'assets/images/placeholder.png',
+  imageUrl: 'images/placeholder.png',
 );
 
 final allPublications = [
@@ -125,12 +126,23 @@ class _HeroSection extends StatelessWidget {
   const _HeroSection();
   @override
   Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobile: _HeroSectionMobile(),
+      tablet: _HeroSectionTablet(),
+      desktop: _HeroSectionDesktop(),
+    );
+  }
+}
+
+class _HeroSectionDesktop extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: 400, // Keep fixed height for desktop
       width: double.infinity,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/publications_hero.jpg'),
+          image: AssetImage('assets/images/hero_background.png'),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
             AppColors.primaryNavy,
@@ -153,7 +165,7 @@ class _HeroSection extends StatelessWidget {
               children: [
                 Text(
                   'Publicaciones Jurídicas',
-                  style: AppTypography.displayLarge.copyWith(
+                  style: AppTypography.displayLarge(context).copyWith(
                     color: Colors.white,
                   ),
                 ),
@@ -162,9 +174,123 @@ class _HeroSection extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 700),
                   child: Text(
                     'Acceda a nuestra colección de artículos, libros y opiniones legales escritos por nuestros expertos en derecho administrativo y tecnología legal.',
-                    style: AppTypography.bodyLarge.copyWith(
+                    style: AppTypography.bodyLarge(context).copyWith(
                       color: Colors.white70,
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroSectionTablet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300, // Adjusted height for tablet
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/hero_background.png'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            AppColors.primaryNavy,
+            BlendMode.overlay,
+          ),
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppSpacing.maxContentWidth,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.pagePadding,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Publicaciones Jurídicas',
+                  style: AppTypography.displayLarge(context).copyWith(
+                    color: Colors.white,
+                    fontSize: 48, // Adjusted font size for tablet
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: Text(
+                    'Acceda a nuestra colección de artículos, libros y opiniones legales escritos por nuestros expertos en derecho administrativo y tecnología legal.',
+                    style: AppTypography.bodyLarge(context).copyWith(
+                      color: Colors.white70,
+                      fontSize: 18, // Adjusted font size for tablet
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroSectionMobile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 250, // Adjusted height for mobile
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/hero_background.png'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            AppColors.primaryNavy,
+            BlendMode.overlay,
+          ),
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppSpacing.maxContentWidth,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.pagePadding,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center, // Center text for mobile
+              children: [
+                Text(
+                  'Publicaciones Jurídicas',
+                  style: AppTypography.displayLarge(context).copyWith(
+                    color: Colors.white,
+                    fontSize: 32, // Adjusted font size for mobile
+                  ),
+                  textAlign: TextAlign.center, // Center text for mobile
+                ),
+                const SizedBox(height: AppSpacing.md),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: Text(
+                    'Acceda a nuestra colección de artículos, libros y opiniones legales escritos por nuestros expertos en derecho administrativo y tecnología legal.',
+                    style: AppTypography.bodyLarge(context).copyWith(
+                      color: Colors.white70,
+                      fontSize: 16, // Adjusted font size for mobile
+                    ),
+                    textAlign: TextAlign.center, // Center text for mobile
                   ),
                 ),
               ],
@@ -200,41 +326,49 @@ class _FilterBar extends StatelessWidget {
           ),
           child: Column(
             children: [
-              ResponsiveBuilder(
-                builder: (context, sizing) {
-                  final isMobile = sizing.isMobile;
-                  return isMobile
-                      ? Column(
-                          children: [
-                            const TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Buscar...',
-                                prefixIcon: Icon(Icons.search),
-                              ),
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                            _buildDropdowns(isMobile: true),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            const Expanded(
-                              flex: 2,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Buscar publicaciones...',
-                                  prefixIcon: Icon(Icons.search),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: AppSpacing.lg),
-                            Expanded(
-                              flex: 3,
-                              child: _buildDropdowns(isMobile: false),
-                            ),
-                          ],
-                        );
-                },
+              ResponsiveLayout(
+                mobile: Column(
+                  children: [
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Buscar...',
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _buildDropdowns(isMobile: true),
+                  ],
+                ),
+                tablet: Column( // Use Column for tablet as well
+                  children: [
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Buscar...',
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _buildDropdowns(isMobile: true),
+                  ],
+                ),
+                desktop: Row(
+                  children: [
+                    const Expanded(
+                      flex: 2,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Buscar publicaciones...',
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.lg),
+                    Expanded(
+                      flex: 3,
+                      child: _buildDropdowns(isMobile: false),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: AppSpacing.md),
               Align(
@@ -269,38 +403,51 @@ class _FilterBar extends StatelessWidget {
   }
 
   Widget _buildDropdowns({required bool isMobile}) {
-    final dropdowns = [
-      Expanded(
-        child: DropdownButtonFormField<String>(
-          items: const [
-            DropdownMenuItem(value: '1', child: Text('Todos los autores')),
-          ],
-          onChanged: (v) {},
-          hint: const Text('Todos los autores'),
-        ),
+    final dropdownWidgets = [
+      DropdownButtonFormField<String>(
+        items: const [
+          DropdownMenuItem(value: '1', child: Text('Todos los autores')),
+        ],
+        onChanged: (v) {},
+        hint: const Text('Todos los autores'),
       ),
-      const SizedBox(width: AppSpacing.md, height: AppSpacing.md),
-      Expanded(
-        child: DropdownButtonFormField<String>(
-          items: const [
-            DropdownMenuItem(value: '1', child: Text('Todos los años')),
-          ],
-          onChanged: (v) {},
-          hint: const Text('Todos los años'),
-        ),
+      DropdownButtonFormField<String>(
+        items: const [
+          DropdownMenuItem(value: '1', child: Text('Todos los años')),
+        ],
+        onChanged: (v) {},
+        hint: const Text('Todos los años'),
       ),
-      const SizedBox(width: AppSpacing.md, height: AppSpacing.md),
-      Expanded(
-        child: DropdownButtonFormField<String>(
-          items: const [
-            DropdownMenuItem(value: '1', child: Text('Todos los tipos')),
-          ],
-          onChanged: (v) {},
-          hint: const Text('Todos los tipos'),
-        ),
+      DropdownButtonFormField<String>(
+        items: const [
+          DropdownMenuItem(value: '1', child: Text('Todos los tipos')),
+        ],
+        onChanged: (v) {},
+        hint: const Text('Todos los tipos'),
       ),
     ];
-    return isMobile ? Column(children: dropdowns) : Row(children: dropdowns);
+
+    if (isMobile) {
+      return Column(
+        children: [
+          dropdownWidgets[0],
+          const SizedBox(height: AppSpacing.md),
+          dropdownWidgets[1],
+          const SizedBox(height: AppSpacing.md),
+          dropdownWidgets[2],
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          Expanded(child: dropdownWidgets[0]),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(child: dropdownWidgets[1]),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(child: dropdownWidgets[2]),
+        ],
+      );
+    }
   }
 }
 
@@ -325,14 +472,20 @@ class _FeaturedPublicationSection extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
               Card(
                 clipBehavior: Clip.antiAlias,
-                child: ScreenTypeLayout.builder(
-                  mobile: (context) => Column(
+                child: ResponsiveLayout(
+                  mobile: Column(
                     children: [
                       _buildAuthorPanel(context),
                       _buildPublicationPanel(context),
                     ],
                   ),
-                  desktop: (context) => Row(
+                  tablet: Column( // Use Column for tablet as well
+                    children: [
+                      _buildAuthorPanel(context),
+                      _buildPublicationPanel(context),
+                    ],
+                  ),
+                  desktop: Row(
                     children: [
                       Expanded(flex: 2, child: _buildAuthorPanel(context)),
                       Expanded(flex: 3, child: _buildPublicationPanel(context)),
@@ -368,13 +521,13 @@ class _FeaturedPublicationSection extends StatelessWidget {
                   children: [
                     Text(
                       publication.author.name,
-                      style: AppTypography.headingSmall.copyWith(
+                      style: AppTypography.headingSmall(context).copyWith(
                         color: Colors.white,
                       ),
                     ),
                     Text(
                       publication.author.title,
-                      style: AppTypography.bodySmall.copyWith(
+                      style: AppTypography.bodySmall(context).copyWith(
                         color: Colors.white70,
                       ),
                     ),
@@ -390,14 +543,14 @@ class _FeaturedPublicationSection extends StatelessWidget {
               Chip(
                 label: Text(publication.category),
                 backgroundColor: AppColors.accentGold,
-                labelStyle: AppTypography.bodySmall.copyWith(
+                labelStyle: AppTypography.bodySmall(context).copyWith(
                   color: AppColors.primaryNavy,
                 ),
               ),
               Chip(
                 label: Text(publication.type),
                 backgroundColor: AppColors.accentGold,
-                labelStyle: AppTypography.bodySmall.copyWith(
+                labelStyle: AppTypography.bodySmall(context).copyWith(
                   color: AppColors.primaryNavy,
                 ),
               ),
@@ -406,12 +559,12 @@ class _FeaturedPublicationSection extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
           Text(
             'Publicado: ${DateFormat('d MMMM, yyyy', 'es_MX').format(publication.publishedDate)}',
-            style: AppTypography.bodySmall.copyWith(color: Colors.white70),
+            style: AppTypography.bodySmall(context).copyWith(color: Colors.white70),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
             'Tiempo de lectura: ${publication.readTimeInMinutes} minutos',
-            style: AppTypography.bodySmall.copyWith(color: Colors.white70),
+            style: AppTypography.bodySmall(context).copyWith(color: Colors.white70),
           ),
           const Divider(color: Colors.white24),
           Row(
@@ -442,9 +595,9 @@ class _FeaturedPublicationSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(publication.title, style: AppTypography.headingMedium),
+          Text(publication.title, style: AppTypography.headingMedium(context)),
           const SizedBox(height: AppSpacing.md),
-          Text(publication.excerpt, style: AppTypography.bodyMedium),
+          Text(publication.excerpt, style: AppTypography.bodyMedium(context)),
           const SizedBox(height: AppSpacing.md),
           Container(
             padding: const EdgeInsets.only(left: AppSpacing.md),
@@ -455,7 +608,7 @@ class _FeaturedPublicationSection extends StatelessWidget {
             ),
             child: Text(
               '"La integración de sistemas de IA en los procesos administrativos gubernamentales representa no solo una oportunidad para mejorar la eficiencia, sino también un desafío significativo..."',
-              style: AppTypography.bodyMedium.copyWith(
+              style: AppTypography.bodyMedium(context).copyWith(
                 fontStyle: FontStyle.italic,
                 color: AppColors.textSecondary,
               ),
@@ -518,31 +671,67 @@ class _CategoriesSection extends StatelessWidget {
             children: [
               const _SectionHeader(title: 'Categorías'),
               const SizedBox(height: AppSpacing.lg),
-              ResponsiveBuilder(
-                builder: (context, sizing) {
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: sizing.isMobile
-                          ? 1
-                          : (sizing.isTablet ? 2 : 4),
-                      crossAxisSpacing: AppSpacing.lg,
-                      mainAxisSpacing: AppSpacing.lg,
-                      childAspectRatio: sizing.isMobile ? 2.5 : 1.5,
-                    ),
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      final cat = categories[index];
-                      return _CategoryCard(
-                        title: cat['title'] as String,
-                        count: cat['count'] as int,
-                        icon: cat['icon'] as IconData,
-                        color: cat['color'] as Color,
-                      );
-                    },
-                  );
-                },
+              ResponsiveLayout(
+                mobile: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    crossAxisSpacing: AppSpacing.lg,
+                    mainAxisSpacing: AppSpacing.lg,
+                    childAspectRatio: 2.5,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final cat = categories[index];
+                    return _CategoryCard(
+                      title: cat['title'] as String,
+                      count: cat['count'] as int,
+                      icon: cat['icon'] as IconData,
+                      color: cat['color'] as Color,
+                    );
+                  },
+                ),
+                tablet: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: AppSpacing.lg,
+                    mainAxisSpacing: AppSpacing.lg,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final cat = categories[index];
+                    return _CategoryCard(
+                      title: cat['title'] as String,
+                      count: cat['count'] as int,
+                      icon: cat['icon'] as IconData,
+                      color: cat['color'] as Color,
+                    );
+                  },
+                ),
+                desktop: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: AppSpacing.lg,
+                    mainAxisSpacing: AppSpacing.lg,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final cat = categories[index];
+                    return _CategoryCard(
+                      title: cat['title'] as String,
+                      count: cat['count'] as int,
+                      icon: cat['icon'] as IconData,
+                      color: cat['color'] as Color,
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -586,7 +775,7 @@ class _CategoryCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             Text(
               title,
-              style: AppTypography.headingSmall.copyWith(color: color),
+              style: AppTypography.headingSmall(context).copyWith(color: color),
             ),
             const SizedBox(height: AppSpacing.sm),
             const Text(
@@ -640,19 +829,47 @@ class _RecentPublicationsSection extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
-              SizedBox(
-                height: 400,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
+              ResponsiveLayout(
+                mobile: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical, // Vertical for mobile
                   itemCount: publications.length,
                   separatorBuilder: (context, index) =>
-                      const SizedBox(width: AppSpacing.lg),
+                      const SizedBox(height: AppSpacing.lg),
                   itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: 400,
-                      child: _PublicationCard(publication: publications[index]),
-                    );
+                    return _PublicationCard(publication: publications[index]);
                   },
+                ),
+                tablet: SizedBox(
+                  height: 400, // Keep fixed height for horizontal scroll on tablet
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: publications.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: AppSpacing.lg),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: 300, // Adjusted width for tablet cards
+                        child: _PublicationCard(publication: publications[index]),
+                      );
+                    },
+                  ),
+                ),
+                desktop: SizedBox(
+                  height: 400, // Keep fixed height for horizontal scroll on desktop
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: publications.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: AppSpacing.lg),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: 400,
+                        child: _PublicationCard(publication: publications[index]),
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -687,9 +904,9 @@ class _PublicationCard extends StatelessWidget {
                 Chip(
                   label: Text(
                     publication.category,
-                    style: AppTypography.bodySmall,
+                    style: AppTypography.bodySmall(context),
                   ),
-                  backgroundColor: publication.categoryColor.withOpacity(0.1),
+                  backgroundColor: publication.categoryColor.withAlpha(26),
                 ),
                 const Spacer(),
                 Text(
@@ -697,25 +914,23 @@ class _PublicationCard extends StatelessWidget {
                     'MMM yyyy',
                     'es_MX',
                   ).format(publication.publishedDate),
-                  style: AppTypography.bodySmall,
+                  style: AppTypography.bodySmall(context),
                 ),
               ],
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
               publication.title,
-              style: AppTypography.headingSmall,
+              style: AppTypography.headingSmall(context),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: AppSpacing.sm),
-            Expanded(
-              child: Text(
-                publication.excerpt,
-                style: AppTypography.bodyMedium,
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Text(
+              publication.excerpt,
+              style: AppTypography.bodyMedium(context),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
             ),
             const Divider(),
             Row(
@@ -730,13 +945,13 @@ class _PublicationCard extends StatelessWidget {
                   children: [
                     Text(
                       publication.author.name,
-                      style: AppTypography.bodySmall.copyWith(
+                      style: AppTypography.bodySmall(context).copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       publication.author.title,
-                      style: AppTypography.caption,
+                      style: AppTypography.caption(context),
                     ),
                   ],
                 ),
@@ -767,19 +982,47 @@ class _AuthorsDirectorySection extends StatelessWidget {
             children: [
               const _SectionHeader(title: 'Directorio de Autores'),
               const SizedBox(height: AppSpacing.lg),
-              SizedBox(
-                height: 170,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
+              ResponsiveLayout(
+                mobile: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical, // Vertical for mobile
                   itemCount: authors.length,
                   separatorBuilder: (context, index) =>
-                      const SizedBox(width: AppSpacing.lg),
+                      const SizedBox(height: AppSpacing.lg),
                   itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: 300,
-                      child: _AuthorCard(author: authors[index]),
-                    );
+                    return _AuthorCard(author: authors[index]);
                   },
+                ),
+                tablet: SizedBox(
+                  height: 170, // Keep fixed height for horizontal scroll on tablet
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: authors.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: AppSpacing.lg),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: 250, // Adjusted width for tablet cards
+                        child: _AuthorCard(author: authors[index]),
+                      );
+                    },
+                  ),
+                ),
+                desktop: SizedBox(
+                  height: 170, // Keep fixed height for horizontal scroll on desktop
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: authors.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: AppSpacing.lg),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: 300,
+                        child: _AuthorCard(author: authors[index]),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
@@ -813,14 +1056,14 @@ class _AuthorCard extends StatelessWidget {
                 children: [
                   Text(
                     author.name,
-                    style: AppTypography.bodyMedium.copyWith(
+                    style: AppTypography.bodyMedium(context).copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(author.title, style: AppTypography.bodySmall),
+                  Text(author.title, style: AppTypography.bodySmall(context)),
                   const SizedBox(height: AppSpacing.sm),
-                  Text('42 publicaciones', style: AppTypography.caption),
+                  Text('42 publicaciones', style: AppTypography.caption(context)),
                 ],
               ),
             ),
@@ -841,7 +1084,7 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Container(width: 6, height: 24, color: AppColors.accentGold),
         const SizedBox(width: AppSpacing.md),
-        Text(title, style: AppTypography.headingMedium),
+        Text(title, style: AppTypography.headingMedium(context)),
       ],
     );
   }

@@ -8,16 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:justicia_administrativa_web/core/constants/colors.dart';
-import 'package:justicia_administrativa_web/core/constants/spacing.dart';
 import 'package:justicia_administrativa_web/core/constants/typography.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:justicia_administrativa_web/shared/widgets/responsive_layout.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-// Import the model
 import '../models/team_member.dart';
-
-// Import dart:ui for ImageFilter
 import 'dart:ui';
 
 class TeamScreen extends HookWidget {
@@ -43,36 +37,60 @@ class TeamScreen extends HookWidget {
             'Derecho Digital',
             'Abogado Digital Certificado',
             'Litigio Público',
+            'Expropiaciones',
           ],
           details: [
             'Fundador de justicIAdministrativa',
-            'Profesor en universidades de México e Iberoamérica',
-            'Autor y coordinador de libros especializados',
+            'Profesor en universidades de México e Iberoamérica en temas de Derecho Administrativo y Digital',
+            'Conductor del programa "Derecho Público en Acción"',
             'Coordinador del Seminario Derecho Administrativo 4RI - IIJUNAM',
-            'Columnista en diversos periódicos nacionales',
+            'Abogado Digital certificado por la Academia Mexicana de Derecho Informático',
           ],
           fullBio: '''
-Alfredo Delgadillo López es el fundador y Director General de justicIAdministrativa, una firma pionera en la integración de tecnología avanzada y derecho administrativo. Con más de 20 años de experiencia en el sector público y privado, ha sido un líder en la transformación digital del derecho en México.
+Fundador de justicIAdministrativa.
 
-Como académico, ha impartido cátedra en las principales universidades de México e Iberoamérica, y coordina el Seminario de Derecho Administrativo 4RI en el Instituto de Investigaciones Jurídicas de la UNAM. Es autor y coordinador de múltiples obras especializadas en derecho administrativo y tecnología.
+Profesor en universidades de México e Iberoamérica en temas de Derecho Administrativo y Digital.
 
-Su visión innovadora lo ha llevado a ser columnista en diversos periódicos nacionales, donde analiza la intersección entre el derecho, la tecnología y la administración pública.
-        ''',
+Conferencista en diversas universidades de México, Madrid, Almería, La Coruña, asimismo en diversas universidades de Ecuador y Colombia. Asimismo ha sido profesor en diversos órganos jurisdiccionales de México e Iberoamérica.
+
+Director ejecutivo de NATICUM.
+
+Conductor del programa "Derecho Público en Acción", transmitido en las plataformas del Centro Virtual de Estudios de la Gestión Pública.
+
+Autor y coordinador de libros sobre derecho administrativo y derecho digital.
+
+Abogado Digital certificado por la Academia Mexicana de Derecho Informático.
+
+Junto al Doctor Miguel Alejandro López Olvera coordina el Seminario Derecho Administrativo en la Cuarta Revolución Industrial en el IIJUNAM.
+
+Dedicado al libre ejercicio de la abogacía como asesor jurídico y litigante en derecho público y derecho digital.
+
+Licenciado en Derecho por la Universidad Autónoma de Nayarit. Con estudios de Maestría en Anticorrupción en la Universidad Panamericana.
+  ''',
           education: [
-            'Licenciatura en Derecho - UNAM',
-            'Maestría en Derecho Administrativo - Universidad Panamericana',
-            'Certificación en Derecho Digital - Instituto Tecnológico de Massachusetts',
+            'Licenciado en Derecho - Universidad Autónoma de Nayarit',
+            'Estudios de Maestría en Anticorrupción - Universidad Panamericana',
           ],
           achievements: [
-            'Premio Nacional de Jurisprudencia 2023',
-            'Reconocimiento a la Innovación Legal 2022',
-            'Miembro del Sistema Nacional de Investigadores',
+            'Abogado Digital certificado por la Academia Mexicana de Derecho Informático',
+            'Fundador de justicIAdministrativa',
+            'Director ejecutivo de NATICUM',
+            'Conductor del programa "Derecho Público en Acción"',
+            'Coordinador del Seminario Derecho Administrativo en la Cuarta Revolución Industrial - IIJUNAM',
+            'Columnista en diversos periódicos en México',
+            'Profesor de Gobierno Digital en la Universidad Panamericana de Ciudad de México',
+          ],
+          previousPositions: [
+            'Profesor en universidades de México e Iberoamérica',
+            'Conferencista en universidades de México, Madrid, Almería, La Coruña',
+            'Conferencista en universidades de Ecuador y Colombia',
+            'Profesor en diversos órganos jurisdiccionales de México e Iberoamérica',
           ],
           admissions: ['México'],
           isFeatured: true,
-          linkedinUrl: 'https://linkedin.com/in/alfredo-delgadillo',
-          email: 'alfredo@justicia-administrativa.mx',
-          phone: '+52 55 1234 5678',
+          linkedinUrl: 'https://www.linkedin.com/in/alfredodelgadillomx/',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
         const TeamMember(
           id: 'luis-humberto-delgadillo',
@@ -84,9 +102,9 @@ Su visión innovadora lo ha llevado a ser columnista en diversos periódicos nac
           type: MemberType.lawyer,
           specialties: [
             'Derecho Tributario',
+            'Contratación pública',
+            'Responsabilidades administrativas',
             'Derecho Fiscal',
-            'Derecho Administrativo',
-            'Consultoría Jurídica',
           ],
           details: [
             'Doctor en Derecho por la UNAM',
@@ -118,6 +136,8 @@ Su excelencia profesional le valió obtener el premio INAP en 1989. Actualmente 
             'Autor de múltiples libros publicados por Limusa y Porrúa',
             'Magistrado del Tribunal Federal de Justicia Fiscal y Administrativa',
             'Director del Centro de Estudios de Derecho Fiscal y Administrativo',
+            'Autor del Compendio de Derecho Administrativo I y II',
+            'Autor de Derecho Disciplinario de la Función Pública',
           ],
           previousPositions: [
             'Magistrado de la Sala Superior - TFJFA',
@@ -131,7 +151,8 @@ Su excelencia profesional le valió obtener el premio INAP en 1989. Actualmente 
           admissions: ['México'],
           isFeatured: false,
           linkedinUrl: '',
-          email: 'luis.delgadillo@justicia-administrativa.mx',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
         const TeamMember(
           id: 'jaime-rodriguez-arana',
@@ -142,9 +163,9 @@ Su excelencia profesional le valió obtener el premio INAP en 1989. Actualmente 
           location: 'A Coruña, España',
           type: MemberType.lawyer,
           specialties: [
-            'Derecho Administrativo',
-            'Derecho Público Global',
-            'Ciencias Administrativas',
+            'Políticas públicas',
+            'Servicios públicos',
+            'Responsabilidad patrimonial del Estado',
             'Buena Administración',
           ],
           details: [
@@ -184,22 +205,23 @@ Es miembro de las más distinguidas academias jurídicas, incluyendo la Real Aca
           admissions: ['España'],
           isFeatured: false,
           linkedinUrl:
-              'https://es.linkedin.com/in/jaime-rodriguez-arana-mu%C3%B1oz-02b48a52',
-          email: 'jaime.rodriguez@justicia-administrativa.mx',
+              'https://www.linkedin.com/in/jaime-rodr%C3%ADguez-arana-2941771b/',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
         const TeamMember(
           id: 'miriam-ivanega',
           name: 'Dra. Míriam Mabel Ivanega',
           title: 'Consejera Académica Internacional',
           imageUrl:
-              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/refs/heads/master/assets/images/miriam-ivanega.jpg',
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/master/assets/images/miriam-ivanega.jpg',
           location: 'Buenos Aires, Argentina',
           type: MemberType.lawyer,
           specialties: [
-            'Derecho Administrativo',
+            'Contratación pública',
+            'Responsabilidades administrativas',
+            'Servicios públicos',
             'Derecho y Ciencias Sociales',
-            'Academia e Investigación',
-            'Gestión Universitaria',
           ],
           details: [
             'Doctora en Derecho y Ciencias Sociales por la Universidad Austral',
@@ -207,6 +229,9 @@ Es miembro de las más distinguidas academias jurídicas, incluyendo la Real Aca
             'Directora de la Maestría en Derecho Administrativo en la U. Austral',
             'Miembro fundador del Foro Iberoamericano de Derecho Administrativo',
             'Líder académica en Argentina',
+            'Miembro Honorario de Asociaciones de Derecho Administrativo de México, República Dominicana, Ecuador, Nicaragua',
+            'Integrante del Comité Académico del Doctorado de Derecho Administrativo Global - Universidad de La Coruña',
+            'Autora de cientos de artículos y 11 libros de derecho público',
           ],
           fullBio: '''
 La Dra. Míriam Mabel Ivanega es una jurista y académica de referencia en Argentina, con una profunda especialización en Derecho Administrativo. Ostenta un Doctorado en Derecho y Ciencias Sociales y una Maestría en Derecho Administrativo, ambos por la prestigiosa Universidad Austral, donde juega un papel central en la formación de las nuevas generaciones de abogados.
@@ -230,8 +255,10 @@ Como una de las figuras fundadoras del Foro Iberoamericano de Derecho Administra
           ],
           admissions: ['Argentina'],
           isFeatured: false,
-          linkedinUrl: 'https://ar.linkedin.com/in/miriammabelivanega',
-          email: 'miriam.ivanega@justicia-administrativa.mx',
+          linkedinUrl:
+              'https://www.linkedin.com/in/miriam-mabel-ivanega-182a1310/',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
         const TeamMember(
           id: 'luis-bejar-rivera',
@@ -242,13 +269,13 @@ Como una de las figuras fundadoras del Foro Iberoamericano de Derecho Administra
           location: 'Sherbrooke, Quebec, Canadá',
           type: MemberType.lawyer,
           specialties: [
+            'Políticas públicas',
+            'Responsabilidad patrimonial del Estado',
+            'Servicios públicos',
             'Derecho y Política',
-            'Ciencia Política',
-            'Investigación Jurídica',
-            'Derecho Comparado',
           ],
           details: [
-            'Profesor en Bishop’s University, Canadá',
+            'Profesor en Bishop\'s University, Canadá',
             'Doctor en Derecho por la Universidad Panamericana',
             'Más de 20 años de experiencia docente internacional',
             'Autor y coautor de más de 20 libros',
@@ -264,7 +291,7 @@ Actualmente adscrito al Departamento de Política y Estudios Internacionales de 
           education: [
             'Doctorado en Derecho - Universidad Panamericana',
             'Maestría en Ciencias Jurídicas - Universidad Panamericana',
-            'Maestría en Ciencia Política - Université de Montréal (en proceso)',
+            'Maestría en Ciencia Política - Université de Montréal (en proceso de redacción)',
             'Licenciado en Derecho - ITESO',
           ],
           achievements: [
@@ -275,78 +302,86 @@ Actualmente adscrito al Departamento de Política y Estudios Internacionales de 
             'Desarrollo y dirección de programas académicos',
           ],
           previousPositions: [
-            'Profesor, Department of Politics & International Studies, Bishop’s University',
+            'Profesor, Department of Politics & International Studies, Bishop\'s University',
           ],
           admissions: ['Canadá', 'México'],
           isFeatured: false,
-          linkedinUrl: 'https://ca.linkedin.com/in/luisjosebejar',
-          email: 'luis.bejar@justicia-administrativa.mx',
+          linkedinUrl:
+              'https://www.linkedin.com/in/luis-jos%C3%A9-b%C3%A9jar-rivera-5941186b/',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
         const TeamMember(
           id: 'raul-rosales',
-          name: 'Raúl Rosales Rosas',
+          name: 'Lic. Raúl Rosales Rosas',
           title: 'Consultor Senior en Derecho Público',
           imageUrl:
-              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/refs/heads/master/assets/images/raul_rosales_rosas.jpg',
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/master/assets/images/raul_rosales_rosas.jpg',
           location: 'Nayarit, México',
           type: MemberType.lawyer,
           specialties: [
-            'Derecho Público',
+            'Responsabilidades administrativas',
+            'Contratación pública',
+            'Derecho urbanístico',
             'Finanzas Públicas',
             'Transparencia',
-            'Desarrollo Urbano',
-            'Fiscalización Superior',
           ],
           details: [
             'Modernización del marco normativo nayarita',
             'Ex Director Jurídico del Órgano de Fiscalización Superior de Nayarit',
             'Ex Delegado Federal de la Financiera Nacional de Desarrollo Agropecuario',
-            'Representante legal de Cementos Cruz Azul',
+            'Representante legal de empresas como Cementos Cruz Azul',
             'Maestro en Derecho Público por la Universidad Panamericana',
-            'Autor de obras especializadas en fiscalización',
+            'Fundador de la Comisión Municipal de Derechos Humanos de Tepic',
           ],
           fullBio: '''
-Raúl Rosales Rosas es un destacado abogado especializado en derecho público con una trayectoria excepcional en el sector gubernamental y privado. Ha sido pieza clave en la modernización del marco normativo nayarita en materia de finanzas públicas, transparencia y desarrollo urbano.
+Ha contribuido a la modernización del marco normativo nayarita en materia de finanzas públicas, transparencia y desarrollo urbano.
 
-Su carrera profesional incluye posiciones de alto nivel como Director Jurídico del Órgano de Fiscalización Superior de Nayarit, Delegado Federal de la Financiera Nacional de Desarrollo Agropecuario, Asesor jurídico del Congreso de Nayarit y Director Jurídico del municipio de Bahía de Banderas.
+Fue analista jurídico en la CNDH y asesor jurídico en ayuntamientos de Tepic y Bahía de Banderas.
 
-En el sector privado, ha sido representante legal de empresas de gran envergadura como Cementos Cruz Azul en temas de desarrollo urbano, demostrando su versatilidad y expertise en diferentes ámbitos del derecho.
+Además fue Director Jurídico en el Órgano de Fiscalización Superior de Nayarit, Delegado Federal de la Financiera Nacional de Desarrollo Agropecuario, Asesor jurídico del Congreso de Nayarit y Director Jurídico en el municipio de Bahía de Banderas.
 
-Como académico, ha impartido clases en la Universidad Autónoma de Nayarit y es autor de obras fundamentales como "Reforma Municipal" (2001) y "Fiscalización Superior: una visión desde las regiones" (2008).
+En el sector privado ha sido representante legal de empresas como Cementos Cruz Azul en temas de desarrollo urbano.
 
-Es fundador de la Comisión Municipal de Derechos Humanos de Tepic, reflejando su compromiso con la justicia y los derechos fundamentales.
-        ''',
+Es Licenciado en Derecho por la UAM y maestro en Derecho Público por la Universidad Panamericana, ha complementado su formación con estudios en España (Universidad Complutense) y EE.UU. (NESE, Massachusetts). Como docente, ha impartido clases en la Universidad Autónoma de Nayarit, y es autor de obras como "Reforma Municipal" (2001) y "Fiscalización Superior: una visión desde las regiones" (2008).
+
+Asimismo, es fundador de la Comisión Municipal de Derechos Humanos de Tepic.
+  ''',
           education: [
-            'Licenciatura en Derecho - UAM',
-            'Maestría en Derecho Público - Universidad Panamericana',
-            'Estudios especializados - Universidad Complutense (España)',
-            'Programa ejecutivo - NESE Business School (Massachusetts, EE.UU.)',
+            'Licenciado en Derecho - UAM',
+            'Maestro en Derecho Público - Universidad Panamericana',
+            'Estudios complementarios - Universidad Complutense (España)',
+            'Estudios complementarios - NESE (Massachusetts, EE.UU.)',
           ],
           achievements: [
             'Fundador de la Comisión Municipal de Derechos Humanos de Tepic',
             'Autor de "Reforma Municipal" (2001)',
             'Autor de "Fiscalización Superior: una visión desde las regiones" (2008)',
-            'Modernizador del marco normativo de Nayarit',
+            'Modernización del marco normativo nayarita',
           ],
           previousPositions: [
+            'Analista jurídico - CNDH',
+            'Asesor jurídico - Ayuntamiento de Tepic',
+            'Asesor jurídico - Ayuntamiento de Bahía de Banderas',
             'Director Jurídico - Órgano de Fiscalización Superior de Nayarit',
             'Delegado Federal - Financiera Nacional de Desarrollo Agropecuario',
-            'Asesor Jurídico - Congreso del Estado de Nayarit',
+            'Asesor jurídico - Congreso del Estado de Nayarit',
             'Director Jurídico - Municipio de Bahía de Banderas',
-            'Analista Jurídico - CNDH',
-            'Representante Legal - Cementos Cruz Azul',
+            'Representante legal - Cementos Cruz Azul',
+            'Docente - Universidad Autónoma de Nayarit',
           ],
           admissions: ['México'],
           isFeatured: false,
-          linkedinUrl: 'https://linkedin.com/in/raul-rosales-rosas',
-          email: 'raul.rosales@justicia-administrativa.mx',
-          phone: '+52 311 234 5678',
+          linkedinUrl: '',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
         const TeamMember(
           id: 'jose-alberto',
-          name: 'Jose Alberto de la Paz',
+          name: 'Dr. Jose Alberto de la Paz',
           title: 'Research Associate',
-          imageUrl: '',
+          imageUrl:
+              'https://raw.githubusercontent.com/emilio-perez-unam/justicia_administrativa_web/refs/heads/master/assets/images/alberto_de_la_paz.jpg',
           location: 'University of Texas at Dallas, USA',
           type: MemberType.engineer,
           specialties: [
@@ -379,22 +414,18 @@ His research focuses on applying advanced machine learning techniques to underst
           isFeatured: false,
           linkedinUrl: 'https://linkedin.com/in/alberto-de-la-paz',
           githubUrl: 'https://github.com/AlbertodelaPaz',
-          email: 'alberto.delapaz@justicia-administrativa.mx',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
-        TeamMember(
+        const TeamMember(
           id: 'sergio-yarza',
-          name: 'Sergio Enrique Yarza Acuña',
+          name: 'Dr.Sergio Enrique Yarza Acuña',
           title: 'Data Scientist',
           imageUrl: '',
           location: 'Tepic, Nayarit, Mexico',
           type: MemberType.engineer,
-          specialties: const [
-            'Applied Mathematics',
-            'Data Analysis',
-            'Python',
-            'R',
-          ],
-          details: const [
+          specialties: ['Applied Mathematics', 'Data Analysis', 'Python', 'R'],
+          details: [
             'Ph.D. in Applied Mathematics',
             'Data Scientist at DeAcero Group',
             'Specialist in statistical modeling',
@@ -404,7 +435,7 @@ Dr. Sergio Enrique Yarza Acuña is a distinguished Data Scientist with a PhD in 
 
 His expertise in both Python and R enables him to tackle diverse challenges in data science, from predictive modeling to deep statistical analysis.
         ''',
-          education: const [
+          education: [
             'PhD in Applied Mathematics - UNAM',
             'MSc in Statistics - Instituto Tecnológico de Monterrey',
             'BSc in Mathematics - Universidad Autónoma de Nayarit',
@@ -414,11 +445,59 @@ His expertise in both Python and R enables him to tackle diverse challenges in d
             'Published research on applied statistical methods',
             'Speaker at international data science conferences',
           ],
-          admissions: const [],
+          admissions: [],
           isFeatured: false,
           linkedinUrl: 'https://www.linkedin.com/in/sergio-yarza/',
           githubUrl: 'https://github.com/SergioYarza',
-          email: 'sergio.yarza@justicia-administrativa.mx',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
+        ),
+        const TeamMember(
+          id: 'emilio-perez-ocampo',
+          name: 'Lic. Emilio Antonio Pérez Ocampo',
+          title: 'Software Engineering Lead',
+          imageUrl: '',
+          location: 'Mexico City, Mexico',
+          type: MemberType.engineer,
+          specialties: [
+            'Flutter',
+            'Machine Learning',
+            'Cloud Computing (GCP/AWS)',
+            'Data Auditing & QA',
+            'Microservices',
+          ],
+          details: [
+            'Computer Science, National Autonomous University of Mexico (UNAM)',
+            'Led software development at General Analytics Solutions & Justicia Administrativa',
+            'Experience in data auditing and machine learning',
+            'Multiple certifications in Cloud, Data, and ML',
+            'Proficient in Flutter, Deno, Python, and Java',
+          ],
+          fullBio: '''
+Proactive Computer Science student at the National Autonomous University of Mexico (UNAM) with over 3 years of professional experience in data auditing, machine learning, and team leadership. Led software development at Neotoro Technology, implementing microservices with Flutter and Deno. Passionate about self-directed learning, with multiple certifications in cloud computing and data science. Experienced in competitive programming, enhancing complex problem-solving abilities.
+        ''',
+          education: [
+            'Bachelor\'s Degree in Computer Science - National Autonomous University of Mexico (UNAM)',
+            'Bachelor\'s Degree in Philosophy - Autonomous University of Nayarit',
+          ],
+          achievements: [
+            'Multiple Google Cloud Certifications',
+            'Microsoft Power BI Data Analyst Certificate',
+            'Multiple podium finishes, International Logic Olympiad',
+            'IEEEXtreme Global Programming Competitor (2020-2024)',
+          ],
+          previousPositions: [
+            'Software Engineering Lead - Neotoro Technology',
+            'Software Developer Intern - Accenture',
+            'Data Annotator - Appen, Lionbridge, iSoftStone',
+            'Freelance Software Developer - Self-Employed',
+          ],
+          admissions: [],
+          isFeatured: false,
+          linkedinUrl:
+              'https://www.linkedin.com/in/emilio-antonio-perez-ocampo/',
+          email: 'solicitudes@justiciadministrativa.com',
+          phone: '+52 311 125 09 06',
         ),
       ],
     );
@@ -518,9 +597,9 @@ His expertise in both Python and R enables him to tackle diverse challenges in d
 
 // New Parallax Hero Section
 class _ParallaxHeroSection extends HookWidget {
-  final ScrollController scrollController;
-
   const _ParallaxHeroSection({required this.scrollController});
+
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -537,8 +616,22 @@ class _ParallaxHeroSection extends HookWidget {
       return () => scrollController.removeListener(listener);
     }, [scrollController]);
 
+    return ResponsiveLayout(
+      mobile: _ParallaxHeroSectionMobile(scrollOffset: scrollOffset.value),
+      tablet: _ParallaxHeroSectionTablet(scrollOffset: scrollOffset.value),
+      desktop: _ParallaxHeroSectionDesktop(scrollOffset: scrollOffset.value),
+    );
+  }
+}
+
+class _ParallaxHeroSectionDesktop extends StatelessWidget {
+  const _ParallaxHeroSectionDesktop({required this.scrollOffset});
+  final double scrollOffset;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 400.h,
+      height: 400.h, // Keep fixed height for desktop
       width: double.infinity,
       clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(color: AppColors.primaryNavy),
@@ -546,7 +639,7 @@ class _ParallaxHeroSection extends HookWidget {
         children: [
           // Parallax background layers
           Positioned(
-            top: scrollOffset.value * 0.5,
+            top: scrollOffset * 0.5,
             left: 0,
             right: 0,
             child: Opacity(
@@ -560,7 +653,7 @@ class _ParallaxHeroSection extends HookWidget {
                       center: Alignment.topRight,
                       radius: 1.5,
                       colors: [
-                        Colors.white.withOpacity(0.3),
+                        Colors.white.withAlpha(77),
                         Colors.transparent,
                       ],
                     ),
@@ -570,7 +663,7 @@ class _ParallaxHeroSection extends HookWidget {
             ),
           ),
           Positioned(
-            top: scrollOffset.value * 0.3,
+            top: scrollOffset * 0.3,
             left: -100,
             child: Container(
               width: 300.w,
@@ -579,7 +672,7 @@ class _ParallaxHeroSection extends HookWidget {
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.techBlue.withOpacity(0.1),
+                    AppColors.techBlue.withAlpha(26),
                     Colors.transparent,
                   ],
                 ),
@@ -590,18 +683,18 @@ class _ParallaxHeroSection extends HookWidget {
           Positioned.fill(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 1200.w),
+                constraints: const BoxConstraints(maxWidth: 1200),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Transform.translate(
-                        offset: Offset(0, scrollOffset.value * 0.1),
+                        offset: Offset(0, scrollOffset * 0.1),
                         child:
                             Text(
                                   'Nuestro Equipo Internacional',
-                                  style: AppTypography.displayLarge.copyWith(
+                                  style: AppTypography.displayLarge(context).copyWith(
                                     color: Colors.white,
                                     fontSize: 56.sp,
                                   ),
@@ -613,13 +706,13 @@ class _ParallaxHeroSection extends HookWidget {
                       ),
                       SizedBox(height: 24.h),
                       Transform.translate(
-                        offset: Offset(0, scrollOffset.value * 0.05),
+                        offset: Offset(0, scrollOffset * 0.05),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(maxWidth: 800.w),
                           child:
                               Text(
                                     'Contamos con un equipo multidisciplinario conformado por expertos en derecho administrativo y por expertos en tecnologías digitales distribuidos en América y Europa',
-                                    style: AppTypography.bodyLarge.copyWith(
+                                    style: AppTypography.bodyLarge(context).copyWith(
                                       color: Colors.white70,
                                       fontSize: 20.sp,
                                     ),
@@ -642,13 +735,229 @@ class _ParallaxHeroSection extends HookWidget {
   }
 }
 
-class _FilterSection extends StatelessWidget {
-  final MemberType selectedFilter;
-  final ValueChanged<MemberType> onFilterChanged;
-  final TextEditingController searchController;
-  final String searchQuery;
-  final VoidCallback onClearSearch;
+class _ParallaxHeroSectionTablet extends StatelessWidget {
+  const _ParallaxHeroSectionTablet({required this.scrollOffset});
+  final double scrollOffset;
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300.h, // Adjusted height for tablet
+      width: double.infinity,
+      clipBehavior: Clip.hardEdge,
+      decoration: const BoxDecoration(color: AppColors.primaryNavy),
+      child: Stack(
+        children: [
+          // Parallax background layers
+          Positioned(
+            top: scrollOffset * 0.5,
+            left: 0,
+            right: 0,
+            child: Opacity(
+              opacity: 0.1,
+              child: Transform.scale(
+                scale: 1.2,
+                child: Container(
+                  height: 400.h, // Adjusted height
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.topRight,
+                      radius: 1.5,
+                      colors: [
+                        Colors.white.withAlpha(77),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: scrollOffset * 0.3,
+            left: -100,
+            child: Container(
+              width: 200.w, // Adjusted width
+              height: 200.h, // Adjusted height
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.techBlue.withAlpha(26),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Content
+          Positioned.fill(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Transform.translate(
+                        offset: Offset(0, scrollOffset * 0.1),
+                        child:
+                            Text(
+                                  'Nuestro Equipo Internacional',
+                                  style: AppTypography.displayLarge(context).copyWith(
+                                    color: Colors.white,
+                                    fontSize: 48.sp, // Adjusted font size
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )
+                                .animate()
+                                .fadeIn(duration: 800.ms)
+                                .slideY(begin: 0.2, end: 0, duration: 800.ms),
+                      ),
+                      SizedBox(height: 20.h), // Adjusted height
+                      Transform.translate(
+                        offset: Offset(0, scrollOffset * 0.05),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 800.w),
+                          child:
+                              Text(
+                                    'Contamos con un equipo multidisciplinario conformado por expertos en derecho administrativo y por expertos en tecnologías digitales distribuidos en América y Europa',
+                                    style: AppTypography.bodyLarge(context).copyWith(
+                                      color: Colors.white70,
+                                      fontSize: 18.sp, // Adjusted font size
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                  .animate()
+                                  .fadeIn(delay: 300.ms, duration: 800.ms)
+                                  .slideY(begin: 0.2, end: 0, duration: 800.ms),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ParallaxHeroSectionMobile extends StatelessWidget {
+  const _ParallaxHeroSectionMobile({required this.scrollOffset});
+  final double scrollOffset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 250.h, // Adjusted height for mobile
+      width: double.infinity,
+      clipBehavior: Clip.hardEdge,
+      decoration: const BoxDecoration(color: AppColors.primaryNavy),
+      child: Stack(
+        children: [
+          // Parallax background layers
+          Positioned(
+            top: scrollOffset * 0.5,
+            left: 0,
+            right: 0,
+            child: Opacity(
+              opacity: 0.1,
+              child: Transform.scale(
+                scale: 1.2,
+                child: Container(
+                  height: 300.h, // Adjusted height
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.topRight,
+                      radius: 1.5,
+                      colors: [
+                        Colors.white.withAlpha(77),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: scrollOffset * 0.3,
+            left: -50, // Adjusted position
+            child: Container(
+              width: 150.w, // Adjusted width
+              height: 150.h, // Adjusted height
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.techBlue.withAlpha(26),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Content
+          Positioned.fill(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Transform.translate(
+                        offset: Offset(0, scrollOffset * 0.1),
+                        child:
+                            Text(
+                                  'Nuestro Equipo Internacional',
+                                  style: AppTypography.displayLarge(context).copyWith(
+                                    color: Colors.white,
+                                    fontSize: 32.sp, // Adjusted font size
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )
+                                .animate()
+                                .fadeIn(duration: 800.ms)
+                                .slideY(begin: 0.2, end: 0, duration: 800.ms),
+                      ),
+                      SizedBox(height: 16.h), // Adjusted height
+                      Transform.translate(
+                        offset: Offset(0, scrollOffset * 0.05),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 800.w),
+                          child:
+                              Text(
+                                    'Contamos con un equipo multidisciplinario conformado por expertos en derecho administrativo y por expertos en tecnologías digitales distribuidos en América y Europa',
+                                    style: AppTypography.bodyLarge(context).copyWith(
+                                      color: Colors.white70,
+                                      fontSize: 16.sp, // Adjusted font size
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                  .animate()
+                                  .fadeIn(delay: 300.ms, duration: 800.ms)
+                                  .slideY(begin: 0.2, end: 0, duration: 800.ms),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterSection extends StatelessWidget {
   const _FilterSection({
     required this.selectedFilter,
     required this.onFilterChanged,
@@ -657,63 +966,11 @@ class _FilterSection extends StatelessWidget {
     required this.onClearSearch,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 24.h),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 1200.w),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: ResponsiveBuilder(
-              builder: (context, sizingInformation) {
-                if (sizingInformation.isMobile) {
-                  return Column(
-                    children: [
-                      Wrap(
-                        spacing: 12.w,
-                        runSpacing: 12.h,
-                        children: _buildFilterChips(),
-                      ),
-                      SizedBox(height: 16.h),
-                      SizedBox(
-                        width: double.infinity,
-                        child: _SearchField(
-                          controller: searchController,
-                          searchQuery: searchQuery,
-                          onClear: onClearSearch,
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Wrap(spacing: 12.w, children: _buildFilterChips()),
-                    SizedBox(
-                      width: 350.w,
-                      child: _SearchField(
-                        controller: searchController,
-                        searchQuery: searchQuery,
-                        onClear: onClearSearch,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  final VoidCallback onClearSearch;
+  final ValueChanged<MemberType> onFilterChanged;
+  final TextEditingController searchController;
+  final String searchQuery;
+  final MemberType selectedFilter;
 
   List<Widget> _buildFilterChips() {
     return [
@@ -745,18 +1002,90 @@ class _FilterSection extends StatelessWidget {
       ),
     ];
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 24.h),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: ResponsiveLayout(
+              mobile: Column(
+                children: [
+                  Wrap(
+                    spacing: 12.w,
+                    runSpacing: 12.h,
+                    children: _buildFilterChips(),
+                  ),
+                  SizedBox(height: 16.h),
+                  SizedBox(
+                    width: double.infinity,
+                    child: _SearchField(
+                      controller: searchController,
+                      searchQuery: searchQuery,
+                      onClear: onClearSearch,
+                    ),
+                  ),
+                ],
+              ),
+              tablet: Column( // Use Column for tablet as well
+                children: [
+                  Wrap(
+                    spacing: 12.w,
+                    runSpacing: 12.h,
+                    children: _buildFilterChips(),
+                  ),
+                  SizedBox(height: 16.h),
+                  SizedBox(
+                    width: double.infinity,
+                    child: _SearchField(
+                      controller: searchController,
+                      searchQuery: searchQuery,
+                      onClear: onClearSearch,
+                    ),
+                  ),
+                ],
+              ),
+              desktop: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(spacing: 12.w, children: _buildFilterChips()),
+                  SizedBox(
+                    width: 350.w,
+                    child: _SearchField(
+                      controller: searchController,
+                      searchQuery: searchQuery,
+                      onClear: onClearSearch,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _SearchField extends StatelessWidget {
-  final TextEditingController controller;
-  final String searchQuery;
-  final VoidCallback onClear;
-
   const _SearchField({
     required this.controller,
     required this.searchQuery,
     required this.onClear,
   });
+
+  final TextEditingController controller;
+  final VoidCallback onClear;
+  final String searchQuery;
 
   @override
   Widget build(BuildContext context) {
@@ -785,12 +1114,6 @@ class _SearchField extends StatelessWidget {
 
 // Enhanced Filter Chip with micro-interactions
 class _EnhancedFilterChip extends HookWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final Color? color;
-  final IconData? icon;
-
   const _EnhancedFilterChip({
     required this.label,
     required this.isSelected,
@@ -798,6 +1121,12 @@ class _EnhancedFilterChip extends HookWidget {
     this.color,
     this.icon,
   });
+
+  final Color? color;
+  final IconData? icon;
+  final bool isSelected;
+  final String label;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -824,7 +1153,7 @@ class _EnhancedFilterChip extends HookWidget {
             color: isSelected
                 ? effectiveColor
                 : (isHovered.value
-                      ? effectiveColor.withOpacity(0.1)
+                      ? effectiveColor.withAlpha(26)
                       : Colors.transparent),
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
@@ -836,7 +1165,7 @@ class _EnhancedFilterChip extends HookWidget {
             boxShadow: isSelected || isHovered.value
                 ? [
                     BoxShadow(
-                      color: effectiveColor.withOpacity(0.3),
+                      color: effectiveColor.withAlpha(77),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -864,7 +1193,7 @@ class _EnhancedFilterChip extends HookWidget {
               ],
               Text(
                 label,
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.bodyMedium(context).copyWith(
                   color: isSelected
                       ? Colors.white
                       : (isHovered.value
@@ -886,105 +1215,152 @@ class _EnhancedFilterChip extends HookWidget {
 
 // Responsive team grid with staggered animations
 class _ResponsiveTeamGrid extends HookWidget {
+  const _ResponsiveTeamGrid({required this.members, required this.searchQuery});
+
   final List<TeamMember> members;
   final String searchQuery;
 
-  const _ResponsiveTeamGrid({required this.members, required this.searchQuery});
+  double _calculateCardHeight(TeamMember member) {
+    double height = 280.0; // Image height
+    height += 120.0; // Name, title, location
+    height += 80.0; // Specialties
+
+    if (member.details.isNotEmpty) {
+      height += 20.0; // "Experiencia destacada" title
+      height += (member.details.take(3).length * 40.0); // Each detail line
+    }
+
+    height += 80.0; // Button and padding
+
+    return height;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.background,
-      padding: EdgeInsets.symmetric(vertical: 60.h),
+      padding: const EdgeInsets.symmetric(vertical: 60.0),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 1200.w),
-          child: ResponsiveBuilder(
-            builder: (context, sizingInformation) {
-              int crossAxisCount;
-              double spacing;
-              EdgeInsets padding;
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: ResponsiveLayout(
+            mobile: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: MasonryGridView.count(
+                  key: const ValueKey(1), // crossAxisCount for mobile
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 16.0,
+                  crossAxisSpacing: 16.0,
+                  itemCount: members.length,
+                  itemBuilder: (context, index) {
+                    final member = members[index];
+                    final cardHeight = _calculateCardHeight(member);
 
-              if (sizingInformation.isMobile) {
-                crossAxisCount = 1;
-                spacing = 16.w;
-                padding = EdgeInsets.symmetric(horizontal: 16.w);
-              } else if (sizingInformation.isTablet) {
-                crossAxisCount = 2;
-                spacing = 20.w;
-                padding = EdgeInsets.symmetric(horizontal: 24.w);
-              } else {
-                crossAxisCount = 3;
-                spacing = 24.w;
-                padding = EdgeInsets.symmetric(horizontal: 24.w);
-              }
-
-              return Padding(
-                padding: padding,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: MasonryGridView.count(
-                    key: ValueKey(crossAxisCount),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: crossAxisCount,
-                    mainAxisSpacing: spacing,
-                    crossAxisSpacing: spacing,
-                    itemCount: members.length,
-                    itemBuilder: (context, index) {
-                      final member = members[index];
-                      final cardHeight = _calculateCardHeight(member);
-
-                      return AnimationConfiguration.staggeredGrid(
-                        position: index,
-                        duration: const Duration(milliseconds: 600),
-                        columnCount: crossAxisCount,
-                        child: SlideAnimation(
-                          verticalOffset: 50.0,
-                          child: FadeInAnimation(
-                            child: _HoverableProfileCard(
-                              member: member,
-                              searchQuery: searchQuery,
-                              height: cardHeight,
-                              index: index,
-                            ),
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 600),
+                      columnCount: 1,
+                      child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: _HoverableProfileCard(
+                            member: member,
+                            searchQuery: searchQuery,
+                            height: cardHeight,
+                            index: index,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ),
+            tablet: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: MasonryGridView.count(
+                  key: const ValueKey(2), // crossAxisCount for tablet
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+                  itemCount: members.length,
+                  itemBuilder: (context, index) {
+                    final member = members[index];
+                    final cardHeight = _calculateCardHeight(member);
+
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 600),
+                      columnCount: 2,
+                      child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: _HoverableProfileCard(
+                            member: member,
+                            searchQuery: searchQuery,
+                            height: cardHeight,
+                            index: index,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            desktop: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: MasonryGridView.count(
+                  key: const ValueKey(3), // crossAxisCount for desktop
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 24.0,
+                  crossAxisSpacing: 24.0,
+                  itemCount: members.length,
+                  itemBuilder: (context, index) {
+                    final member = members[index];
+                    final cardHeight = _calculateCardHeight(member);
+
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 600),
+                      columnCount: 3,
+                      child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: _HoverableProfileCard(
+                            member: member,
+                            searchQuery: searchQuery,
+                            height: cardHeight,
+                            index: index,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
         ),
       ),
     );
   }
-
-  double _calculateCardHeight(TeamMember member) {
-    double height = 280.h; // Image height
-    height += 120.h; // Name, title, location
-    height += 80.h; // Specialties
-
-    if (member.details.isNotEmpty) {
-      height += 20.h; // "Experiencia destacada" title
-      height += (member.details.take(3).length * 40.h); // Each detail line
-    }
-
-    height += 80.h; // Button and padding
-
-    return height;
-  }
 }
 
 // New hoverable card with enhanced animations
 class _HoverableProfileCard extends HookWidget {
-  final TeamMember member;
-  final String searchQuery;
-  final double height;
-  final int index;
-
   const _HoverableProfileCard({
     required this.member,
     required this.searchQuery,
@@ -992,11 +1368,12 @@ class _HoverableProfileCard extends HookWidget {
     required this.index,
   });
 
-  Future<void> _launchUrl(String? urlString) async {
-    if (urlString != null && await canLaunchUrl(Uri.parse(urlString))) {
-      await launchUrl(Uri.parse(urlString));
-    }
-  }
+  final double height;
+  final int index;
+  final TeamMember member;
+  final String searchQuery;
+
+  
 
   Text _highlightText(String text, TextStyle style) {
     if (searchQuery.isEmpty) {
@@ -1028,7 +1405,7 @@ class _HoverableProfileCard extends HookWidget {
         TextSpan(
           text: text.substring(match.start, match.end),
           style: style.copyWith(
-            backgroundColor: Colors.yellow.withOpacity(0.4),
+            backgroundColor: Colors.yellow.withAlpha(102),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -1049,10 +1426,7 @@ class _HoverableProfileCard extends HookWidget {
     final isPressed = useState(false);
     final isEngineer = member.type == MemberType.engineer;
     final accentColor = isEngineer ? AppColors.techBlue : AppColors.primaryNavy;
-    final String? targetUrl = isEngineer
-        ? member.githubUrl
-        : member.linkedinUrl;
-    final bool hasUrl = targetUrl != null && targetUrl.isNotEmpty;
+    
 
     return MouseRegion(
       onEnter: (_) => isHovered.value = true,
@@ -1072,14 +1446,14 @@ class _HoverableProfileCard extends HookWidget {
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(isHovered.value ? 0.15 : 0.08),
+                color: Colors.black.withAlpha(isHovered.value ? 38 : 20),
                 blurRadius: isHovered.value ? 30.r : 20.r,
                 offset: Offset(0, isHovered.value ? 15.h : 10.h),
                 spreadRadius: isHovered.value ? 5 : 0,
               ),
               if (isHovered.value)
                 BoxShadow(
-                  color: accentColor.withOpacity(0.1),
+                  color: accentColor.withAlpha(26),
                   blurRadius: 20.r,
                   offset: Offset(0, 10.h),
                 ),
@@ -1109,7 +1483,7 @@ class _HoverableProfileCard extends HookWidget {
                       // Name and Title
                       _highlightText(
                         member.name,
-                        AppTypography.headingSmall.copyWith(
+                        AppTypography.headingSmall(context).copyWith(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.sp,
@@ -1118,7 +1492,7 @@ class _HoverableProfileCard extends HookWidget {
                       SizedBox(height: 4.h),
                       _highlightText(
                         member.title,
-                        AppTypography.bodyMedium.copyWith(
+                        AppTypography.bodyMedium(context).copyWith(
                           color: accentColor,
                           fontWeight: FontWeight.w500,
                           fontSize: 14.sp,
@@ -1144,7 +1518,7 @@ class _HoverableProfileCard extends HookWidget {
                             Expanded(
                               child: _highlightText(
                                 member.location,
-                                AppTypography.bodySmall.copyWith(
+                                AppTypography.bodySmall(context).copyWith(
                                   color: AppColors.textTertiary,
                                   fontSize: 12.sp,
                                 ),
@@ -1179,23 +1553,23 @@ class _HoverableProfileCard extends HookWidget {
                             ),
                             decoration: BoxDecoration(
                               color: isHighlighted
-                                  ? Colors.yellow.withOpacity(0.3)
+                                  ? Colors.yellow.withAlpha(77)
                                   : (isHovered.value
-                                        ? accentColor.withOpacity(0.15)
-                                        : accentColor.withOpacity(0.1)),
+                                        ? accentColor.withAlpha(38)
+                                        : accentColor.withAlpha(26)),
                               borderRadius: BorderRadius.circular(16.r),
                               border: isHighlighted
                                   ? Border.all(color: Colors.orange, width: 1.5)
                                   : (isHovered.value
                                         ? Border.all(
-                                            color: accentColor.withOpacity(0.3),
+                                            color: accentColor.withAlpha(77),
                                             width: 1,
                                           )
                                         : null),
                             ),
                             child: Text(
                               spec,
-                              style: AppTypography.caption.copyWith(
+                              style: AppTypography.caption(context).copyWith(
                                 color: accentColor,
                                 fontWeight: isHighlighted || isHovered.value
                                     ? FontWeight.bold
@@ -1213,7 +1587,7 @@ class _HoverableProfileCard extends HookWidget {
                       if (member.details.isNotEmpty) ...[
                         Text(
                           'Experiencia destacada',
-                          style: AppTypography.bodySmall.copyWith(
+                          style: AppTypography.bodySmall(context).copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.textSecondary,
                             fontSize: 12.sp,
@@ -1256,7 +1630,7 @@ class _HoverableProfileCard extends HookWidget {
                                     Expanded(
                                       child: _highlightText(
                                         entry.value,
-                                        AppTypography.caption.copyWith(
+                                        AppTypography.caption(context).copyWith(
                                           color: AppColors.textSecondary,
                                           fontSize: 11.sp,
                                         ),
@@ -1281,7 +1655,7 @@ class _HoverableProfileCard extends HookWidget {
                           ), // <-- FIXED: Changed from /team/ to /equipo/
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isHovered.value
-                                ? accentColor.withOpacity(0.9)
+                                ? accentColor.withAlpha(230)
                                 : accentColor,
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -1296,7 +1670,7 @@ class _HoverableProfileCard extends HookWidget {
                           ),
                           label: Text(
                             'Ver Perfil Completo',
-                            style: AppTypography.button.copyWith(
+                            style: AppTypography.button(context).copyWith(
                               fontSize: 14.sp,
                             ),
                           ),
@@ -1316,11 +1690,6 @@ class _HoverableProfileCard extends HookWidget {
 
 // Enhanced image section with hover effects
 class _EnhancedImageSection extends HookWidget {
-  final TeamMember member;
-  final Color accentColor;
-  final double height;
-  final bool isHovered;
-
   const _EnhancedImageSection({
     required this.member,
     required this.accentColor,
@@ -1328,112 +1697,10 @@ class _EnhancedImageSection extends HookWidget {
     required this.isHovered,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    final imageLoadController = useAnimationController(
-      duration: const Duration(milliseconds: 600),
-    );
-
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      height: height,
-      decoration: BoxDecoration(
-        color: accentColor.withOpacity(0.05),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.r),
-          topRight: Radius.circular(20.r),
-        ),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          if (member.imageUrl.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.r),
-                topRight: Radius.circular(20.r),
-              ),
-              child: AnimatedScale(
-                scale: isHovered ? 1.1 : 1.0,
-                duration: const Duration(milliseconds: 300),
-                child: CachedNetworkImage(
-                  imageUrl: member.imageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                  placeholder: (context, url) => _buildShimmerLoading(),
-                  errorWidget: (context, url, error) =>
-                      _buildAnimatedPlaceholder(accentColor),
-                  imageBuilder: (context, imageProvider) => AnimatedBuilder(
-                    animation: imageLoadController,
-                    builder: (context, child) {
-                      imageLoadController.forward();
-                      return Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          // Blurred background
-                          Opacity(
-                            opacity: 1 - imageLoadController.value,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(
-                                  sigmaX: 20,
-                                  sigmaY: 20,
-                                ),
-                                child: Container(
-                                  color: Colors.black.withOpacity(0.1),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // Clear image
-                          Opacity(
-                            opacity: imageLoadController.value,
-                            child: Image(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            )
-          else
-            _buildAnimatedPlaceholder(accentColor),
-
-          // Gradient overlay with hover effect
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              height: isHovered ? 120.h : 100.h,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(isHovered ? 0.8 : 0.7),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  final Color accentColor;
+  final double height;
+  final bool isHovered;
+  final TeamMember member;
 
   Widget _buildShimmerLoading() {
     return Shimmer.fromColors(
@@ -1462,8 +1729,8 @@ class _EnhancedImageSection extends HookWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                accentColor.withOpacity(0.1 * value),
-                accentColor.withOpacity(0.2 * value),
+                accentColor.withAlpha((26 * value).round()),
+                accentColor.withAlpha((51 * value).round()),
               ],
             ),
           ),
@@ -1477,7 +1744,7 @@ class _EnhancedImageSection extends HookWidget {
                   backgroundColor: Colors.white,
                   child: Text(
                     member.name.split(' ').map((e) => e[0]).take(2).join(),
-                    style: AppTypography.displayMedium.copyWith(
+                    style: AppTypography.displayMedium(context).copyWith(
                       color: accentColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 28.sp,
@@ -1491,13 +1758,139 @@ class _EnhancedImageSection extends HookWidget {
       },
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    final imageLoadController = useAnimationController(
+      duration: const Duration(milliseconds: 600),
+    );
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      height: height,
+      decoration: BoxDecoration(
+        color: accentColor.withAlpha(13),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.r),
+          topRight: Radius.circular(20.r),
+        ),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (member.imageUrl.isNotEmpty)
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.r),
+                topRight: Radius.circular(20.r),
+              ),
+              child: AnimatedScale(
+                scale: isHovered ? 1.1 : 1.0,
+                duration: const Duration(milliseconds: 300),
+                child: CachedNetworkImage(
+                  imageUrl: member.imageUrl,
+                  fit: BoxFit.cover,
+                  // THIS IS THE REFINED FIX: A value between center (0.0) and top (-1.0)
+                  alignment: const Alignment(0.0, -0.8),
+                  width: double.infinity,
+                  height: double.infinity,
+                  placeholder: (context, url) => _buildShimmerLoading(),
+                  errorWidget: (context, url, error) =>
+                      _buildAnimatedPlaceholder(accentColor),
+                  imageBuilder: (context, imageProvider) => AnimatedBuilder(
+                    animation: imageLoadController,
+                    builder: (context, child) {
+                      imageLoadController.forward();
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          // Blurred background
+                          Opacity(
+                            opacity: 1 - imageLoadController.value,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                  // THIS IS THE REFINED FIX
+                                  alignment: const Alignment(0.0, -0.8),
+                                ),
+                              ),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 20,
+                                  sigmaY: 20,
+                                ),
+                                child: Container(
+                                  color: Colors.black.withAlpha(26),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Clear image
+                          Opacity(
+                            opacity: imageLoadController.value,
+                            child: Image(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                              // THIS IS THE REFINED FIX
+                              alignment: const Alignment(0.0, -0.8),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            )
+          else
+            _buildAnimatedPlaceholder(accentColor),
+
+          // Gradient overlay with hover effect
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isHovered ? 120.h : 100.h,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withAlpha(isHovered ? 204 : 179),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.searchQuery, required this.selectedFilter});
+
   final String searchQuery;
   final MemberType selectedFilter;
 
-  const _EmptyState({required this.searchQuery, required this.selectedFilter});
+  String _getFilterLabel(MemberType type) {
+    switch (type) {
+      case MemberType.lawyer:
+        return 'abogados';
+      case MemberType.engineer:
+        return 'ingenieros IA';
+      case MemberType.consultant:
+        return 'consultores';
+      case MemberType.all:
+        return 'miembros';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1509,7 +1902,7 @@ class _EmptyState extends StatelessWidget {
             Icon(
                   Icons.search_off,
                   size: 80.sp,
-                  color: AppColors.textTertiary.withOpacity(0.5),
+                  color: AppColors.textTertiary.withAlpha(128),
                 )
                 .animate()
                 .scale(duration: 600.ms, curve: Curves.elasticOut)
@@ -1517,7 +1910,7 @@ class _EmptyState extends StatelessWidget {
             SizedBox(height: 24.h),
             Text(
               'No se encontraron resultados',
-              style: AppTypography.headingMedium.copyWith(
+              style: AppTypography.headingMedium(context).copyWith(
                 color: AppColors.textSecondary,
                 fontSize: 24.sp,
               ),
@@ -1527,7 +1920,7 @@ class _EmptyState extends StatelessWidget {
               searchQuery.isNotEmpty
                   ? 'No encontramos miembros del equipo que coincidan con "$searchQuery"'
                   : 'No hay ${_getFilterLabel(selectedFilter)} en el equipo actualmente',
-              style: AppTypography.bodyLarge.copyWith(
+              style: AppTypography.bodyLarge(context).copyWith(
                 color: AppColors.textTertiary,
                 fontSize: 16.sp,
               ),
@@ -1555,19 +1948,6 @@ class _EmptyState extends StatelessWidget {
       ),
     );
   }
-
-  String _getFilterLabel(MemberType type) {
-    switch (type) {
-      case MemberType.lawyer:
-        return 'abogados';
-      case MemberType.engineer:
-        return 'ingenieros IA';
-      case MemberType.consultant:
-        return 'consultores';
-      case MemberType.all:
-        return 'miembros';
-    }
-  }
 }
 
 class _BreadcrumbSection extends StatelessWidget {
@@ -1576,15 +1956,18 @@ class _BreadcrumbSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60.h,
       width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        vertical: 16.h, // Adjusted vertical padding
+        horizontal: 24.w,
+      ),
       decoration: const BoxDecoration(
         color: AppColors.background,
         border: Border(bottom: BorderSide(color: AppColors.divider)),
       ),
       child: Center(
         child: Container(
-          constraints: BoxConstraints(maxWidth: 1200.w),
+          constraints: const BoxConstraints(maxWidth: 1200),
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Row(
             children: [
@@ -1596,7 +1979,7 @@ class _BreadcrumbSection extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 'Inicio',
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.bodyMedium(context).copyWith(
                   color: AppColors.textTertiary,
                   fontSize: 14.sp,
                 ),
@@ -1610,7 +1993,7 @@ class _BreadcrumbSection extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 'Equipo',
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.bodyMedium(context).copyWith(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w600,
                   fontSize: 14.sp,

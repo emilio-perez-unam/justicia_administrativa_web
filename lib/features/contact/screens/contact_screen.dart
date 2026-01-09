@@ -4,21 +4,11 @@ import 'package:justicia_administrativa_web/core/constants/colors.dart';
 import 'package:justicia_administrativa_web/core/constants/spacing.dart';
 import 'package:justicia_administrativa_web/core/constants/typography.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:justicia_administrativa_web/shared/widgets/responsive_layout.dart';
+
 
 // A simple data model for an office location
 class _Office {
-  final String city;
-  final String designation;
-  final String address;
-  final String phone1;
-  final String phone2;
-  final String schedule;
-  final String amenities;
-  final List<String> specialties;
-  final Color themeColor;
-  final IconData icon;
-
   const _Office({
     required this.city,
     required this.designation,
@@ -31,6 +21,17 @@ class _Office {
     required this.themeColor,
     required this.icon,
   });
+
+  final String address;
+  final String amenities;
+  final String city;
+  final String designation;
+  final IconData icon;
+  final String phone1;
+  final String phone2;
+  final String schedule;
+  final List<String> specialties;
+  final Color themeColor;
 }
 
 class ContactScreen extends StatelessWidget {
@@ -58,14 +59,25 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobile: _HeroSectionMobile(),
+      tablet: _HeroSectionTablet(),
+      desktop: _HeroSectionDesktop(),
+    );
+  }
+}
+
+class _HeroSectionDesktop extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 400,
+      height: 400, // Keep fixed height for desktop
       decoration: BoxDecoration(
-        color: AppColors.primaryNavy.withOpacity(0.7),
+        color: AppColors.primaryNavy.withAlpha(179),
         // TODO: Replace with your actual hero image for the contact page
         image: const DecorationImage(
-          image: AssetImage('assets/images/contact_hero_background.jpg'),
+          image: AssetImage('images/contact_hero_background.jpg'),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
             AppColors.primaryNavy,
@@ -88,7 +100,7 @@ class _HeroSection extends StatelessWidget {
               children: [
                 Text(
                   'Contáctenos',
-                  style: AppTypography.displayLarge.copyWith(
+                  style: AppTypography.displayLarge(context).copyWith(
                     color: Colors.white,
                   ),
                 ),
@@ -97,9 +109,127 @@ class _HeroSection extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 757),
                   child: Text(
                     'Estamos a su disposición para resolver sus consultas legales y tecnológicas. Nuestro equipo internacional está listo para atenderle.',
-                    style: AppTypography.bodyLarge.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                    style: AppTypography.bodyLarge(context).copyWith(
+                      color: Colors.white.withAlpha(230),
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroSectionTablet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 300, // Adjusted height for tablet
+      decoration: BoxDecoration(
+        color: AppColors.primaryNavy.withAlpha(179),
+        // TODO: Replace with your actual hero image for the contact page
+        image: const DecorationImage(
+          image: AssetImage('images/contact_hero_background.png'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            AppColors.primaryNavy,
+            BlendMode.overlay,
+          ),
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppSpacing.maxContentWidth,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.pagePadding,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Contáctenos',
+                  style: AppTypography.displayLarge(context).copyWith(
+                    color: Colors.white,
+                    fontSize: 48, // Adjusted font size for tablet
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 757),
+                  child: Text(
+                    'Estamos a su disposición para resolver sus consultas legales y tecnológicas. Nuestro equipo internacional está listo para atenderle.',
+                    style: AppTypography.bodyLarge(context).copyWith(
+                      color: Colors.white.withAlpha(230),
+                      fontSize: 18, // Adjusted font size for tablet
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroSectionMobile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 250, // Adjusted height for mobile
+      decoration: BoxDecoration(
+        color: AppColors.primaryNavy.withAlpha(179),
+        // TODO: Replace with your actual hero image for the contact page
+        image: const DecorationImage(
+          image: AssetImage('images/contact_hero_background.png'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            AppColors.primaryNavy,
+            BlendMode.overlay,
+          ),
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppSpacing.maxContentWidth,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.pagePadding,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center, // Center text for mobile
+              children: [
+                Text(
+                  'Contáctenos',
+                  style: AppTypography.displayLarge(context).copyWith(
+                    color: Colors.white,
+                    fontSize: 32, // Adjusted font size for mobile
+                  ),
+                  textAlign: TextAlign.center, // Center text for mobile
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 757),
+                  child: Text(
+                    'Estamos a su disposición para resolver sus consultas legales y tecnológicas. Nuestro equipo internacional está listo para atenderle.',
+                    style: AppTypography.bodyLarge(context).copyWith(
+                      color: Colors.white.withAlpha(230),
+                      fontSize: 16, // Adjusted font size for mobile
+                    ),
+                    textAlign: TextAlign.center, // Center text for mobile
                   ),
                 ),
               ],
@@ -117,8 +247,11 @@ class _BreadcrumbSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45,
       width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.md, // Adjusted vertical padding
+        horizontal: AppSpacing.pagePadding,
+      ),
       decoration: const BoxDecoration(
         color: AppColors.background,
         border: Border(bottom: BorderSide(color: AppColors.divider)),
@@ -128,34 +261,29 @@ class _BreadcrumbSection extends StatelessWidget {
           constraints: const BoxConstraints(
             maxWidth: AppSpacing.maxContentWidth,
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.pagePadding,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.home_filled,
-                  color: AppColors.textSecondary,
-                  size: 16,
+          child: Row(
+            children: [
+              Icon(
+                Icons.home_filled,
+                color: AppColors.textSecondary,
+                size: 16,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Text('Inicio', style: AppTypography.bodySmall(context)),
+              const SizedBox(width: AppSpacing.xs),
+              const Icon(
+                Icons.chevron_right,
+                color: AppColors.textTertiary,
+                size: 16,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Text(
+                'Contacto',
+                style: AppTypography.bodySmall(context).copyWith(
+                  color: AppColors.textPrimary,
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                Text('Inicio', style: AppTypography.bodySmall),
-                const SizedBox(width: AppSpacing.xs),
-                const Icon(
-                  Icons.chevron_right,
-                  color: AppColors.textTertiary,
-                  size: 16,
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  'Contacto',
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -173,8 +301,8 @@ class _OfficesSection extends StatelessWidget {
       designation: 'Sede Principal',
       address:
           'Av. Presidente Masaryk 111, Polanco, Miguel Hidalgo, 11560 CDMX',
-      phone1: '+52 (55) 1234-5678',
-      phone2: '+52 (55) 8765-4321',
+      phone1: '+52 311 125 09 06',
+      phone2: 'solicitudes@justiciadministrativa.com',
       schedule: 'Lun - Vie: 9:00 - 18:00',
       amenities: 'Estacionamiento disponible',
       specialties: [
@@ -190,8 +318,8 @@ class _OfficesSection extends StatelessWidget {
       city: 'Guadalajara',
       designation: 'Tech Hub',
       address: 'Av. Américas 1254, Country Club, 44610 Guadalajara, Jalisco',
-      phone1: '+52 (33) 3456-7890',
-      phone2: '+52 (33) 9876-5432',
+      phone1: '+52 311 125 09 06',
+      phone2: 'solicitudes@justiciadministrativa.com',
       schedule: 'Lun - Vie: 8:30 - 17:30',
       amenities: 'Acceso para startups',
       specialties: ['Startups', 'LegalTech', 'IA Legal', 'Regulatorio'],
@@ -202,8 +330,8 @@ class _OfficesSection extends StatelessWidget {
       city: 'Miami',
       designation: 'Operaciones LatAm',
       address: '1001 Brickell Bay Dr, Suite 1200, Miami, FL 33131',
-      phone1: '+1 (305) 456-7890',
-      phone2: 'miami@justiciaadmin.com',
+      phone1: '+52 311 125 09 06',
+      phone2: 'solicitudes@justiciadministrativa.com',
       schedule: 'Mon - Fri: 9:00 - 17:00',
       amenities: 'Atención bilingüe',
       specialties: [
@@ -219,8 +347,8 @@ class _OfficesSection extends StatelessWidget {
       city: 'Madrid',
       designation: 'Operaciones UE',
       address: 'Calle de Serrano 41, 4ª planta, 28001 Madrid, España',
-      phone1: '+34 91 123 4567',
-      phone2: 'madrid@justiciaadmin.com',
+      phone1: '+52 311 125 09 06',
+      phone2: 'solicitudes@justiciadministrativa.com',
       schedule: 'Lun - Vie: 9:30 - 18:30',
       amenities: 'Asesoría en GDPR',
       specialties: ['Derecho UE', 'Inversiones', 'RegTech', 'IA Legal'],
@@ -244,29 +372,50 @@ class _OfficesSection extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Text('Nuestras Oficinas', style: AppTypography.headingLarge),
+              Text('Nuestras Oficinas', style: AppTypography.headingLarge(context)),
               const SizedBox(height: AppSpacing.xxxl),
               _InteractiveMap(offices: offices),
               const SizedBox(height: AppSpacing.xxxl),
-              ResponsiveBuilder(
-                builder: (context, sizing) {
-                  final crossAxisCount = sizing.isMobile
-                      ? 1
-                      : (sizing.isTablet ? 2 : 4);
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: AppSpacing.lg,
-                      mainAxisSpacing: AppSpacing.lg,
-                      childAspectRatio: 0.5,
-                    ),
-                    itemCount: offices.length,
-                    itemBuilder: (context, index) =>
-                        _OfficeCard(office: offices[index]),
-                  );
-                },
+              ResponsiveLayout(
+                mobile: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    crossAxisSpacing: AppSpacing.lg,
+                    mainAxisSpacing: AppSpacing.lg,
+                    childAspectRatio: 0.5,
+                  ),
+                  itemCount: offices.length,
+                  itemBuilder: (context, index) =>
+                      _OfficeCard(office: offices[index]),
+                ),
+                tablet: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: AppSpacing.lg,
+                    mainAxisSpacing: AppSpacing.lg,
+                    childAspectRatio: 0.5,
+                  ),
+                  itemCount: offices.length,
+                  itemBuilder: (context, index) =>
+                      _OfficeCard(office: offices[index]),
+                ),
+                desktop: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: AppSpacing.lg,
+                    mainAxisSpacing: AppSpacing.lg,
+                    childAspectRatio: 0.5,
+                  ),
+                  itemCount: offices.length,
+                  itemBuilder: (context, index) =>
+                      _OfficeCard(office: offices[index]),
+                ),
               ),
             ],
           ),
@@ -277,9 +426,9 @@ class _OfficesSection extends StatelessWidget {
 }
 
 class _InteractiveMap extends StatelessWidget {
-  final List<_Office> offices;
-
   const _InteractiveMap({required this.offices});
+
+  final List<_Office> offices;
 
   @override
   Widget build(BuildContext context) {
@@ -314,24 +463,68 @@ class _InteractiveMap extends StatelessWidget {
         .whereType<Marker>()
         .toList(); // Filter out any nulls
 
-    return SizedBox(
-      height: 500, // Define a height for the map container
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-        child: FlutterMap(
-          options: MapOptions(
-            initialCenter: LatLng(23.6345, -102.5528), // Centered on Mexico
-            initialZoom: 4.5,
-          ),
-          children: [
-            // The map background tiles
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.justiciaadministrativa.app',
+    return ResponsiveLayout(
+      mobile: SizedBox(
+        height: 300, // Adjusted height for mobile
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+          child: FlutterMap(
+            options: MapOptions(
+              initialCenter: LatLng(23.6345, -102.5528), // Centered on Mexico
+              initialZoom: 4.5,
             ),
-            // The layer for your office markers
-            MarkerLayer(markers: markers),
-          ],
+            children: [
+              // The map background tiles
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.justiciaadministrativa.app',
+              ),
+              // The layer for your office markers
+              MarkerLayer(markers: markers),
+            ],
+          ),
+        ),
+      ),
+      tablet: SizedBox(
+        height: 400, // Adjusted height for tablet
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+          child: FlutterMap(
+            options: MapOptions(
+              initialCenter: LatLng(23.6345, -102.5528), // Centered on Mexico
+              initialZoom: 4.5,
+            ),
+            children: [
+              // The map background tiles
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.justiciaadministrativa.app',
+              ),
+              // The layer for your office markers
+              MarkerLayer(markers: markers),
+            ],
+          ),
+        ),
+      ),
+      desktop: SizedBox(
+        height: 500, // Keep fixed height for desktop
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+          child: FlutterMap(
+            options: MapOptions(
+              initialCenter: LatLng(23.6345, -102.5528), // Centered on Mexico
+              initialZoom: 4.5,
+            ),
+            children: [
+              // The map background tiles
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.justiciaadministrativa.app',
+              ),
+              // The layer for your office markers
+              MarkerLayer(markers: markers),
+            ],
+          ),
         ),
       ),
     );
@@ -339,8 +532,9 @@ class _InteractiveMap extends StatelessWidget {
 }
 
 class _OfficeCard extends StatelessWidget {
-  final _Office office;
   const _OfficeCard({required this.office});
+
+  final _Office office;
 
   @override
   Widget build(BuildContext context) {
@@ -362,13 +556,13 @@ class _OfficeCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   office.city,
-                  style: AppTypography.headingSmall.copyWith(
+                  style: AppTypography.headingSmall(context).copyWith(
                     color: Colors.white,
                   ),
                 ),
                 Text(
                   office.designation,
-                  style: AppTypography.bodySmall.copyWith(
+                  style: AppTypography.bodySmall(context).copyWith(
                     color: Colors.white70,
                   ),
                 ),
@@ -390,7 +584,7 @@ class _OfficeCard extends StatelessWidget {
                   const Divider(height: AppSpacing.lg),
                   Text(
                     'Especialización',
-                    style: AppTypography.bodyLarge.copyWith(
+                    style: AppTypography.bodyLarge(context).copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -422,9 +616,10 @@ class _OfficeCard extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.icon, required this.text});
+
   final IconData icon;
   final String text;
-  const _InfoRow({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -435,7 +630,7 @@ class _InfoRow extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: AppColors.textSecondary),
           const SizedBox(width: AppSpacing.md),
-          Expanded(child: Text(text, style: AppTypography.bodySmall)),
+          Expanded(child: Text(text, style: AppTypography.bodySmall(context))),
         ],
       ),
     );
@@ -450,11 +645,36 @@ class _ContactFormSection extends StatefulWidget {
 }
 
 class _ContactFormSectionState extends State<_ContactFormSection> {
-  final _formKey = GlobalKey<FormState>();
   String? _consultaType;
-  String? _preferredOffice;
-  bool _isUrgent = false;
   String? _contactMethod;
+  final _formKey = GlobalKey<FormState>();
+  bool _isUrgent = false;
+  String? _preferredOffice;
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: Text(
+        title,
+        style: AppTypography.bodyLarge(context).copyWith(fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildRadio<T>(
+    String title,
+    T value,
+    T? groupValue,
+    ValueChanged<T?> onChanged,
+  ) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Radio<T>(value: value, groupValue: groupValue, onChanged: onChanged),
+        Text(title),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -478,48 +698,54 @@ class _ContactFormSectionState extends State<_ContactFormSection> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Contáctenos', style: AppTypography.headingLarge),
+                    Text('Contáctenos', style: AppTypography.headingLarge(context)),
                     const SizedBox(height: AppSpacing.xl),
-                    ResponsiveBuilder(
-                      builder: (context, sizing) {
-                        if (sizing.isMobile) {
-                          return Column(
-                            children: const [
-                              _FullNameField(),
-                              SizedBox(height: AppSpacing.lg),
-                              _EmailField(),
-                            ],
-                          );
-                        }
-                        return Row(
-                          children: const [
-                            Expanded(child: _FullNameField()),
-                            SizedBox(width: AppSpacing.lg),
-                            Expanded(child: _EmailField()),
-                          ],
-                        );
-                      },
+                    ResponsiveLayout(
+                      mobile: Column(
+                        children: const [
+                          _FullNameField(),
+                          SizedBox(height: AppSpacing.lg),
+                          _EmailField(),
+                        ],
+                      ),
+                      tablet: Row( // Using Row for tablet
+                        children: const [
+                          Expanded(child: _FullNameField()),
+                          SizedBox(width: AppSpacing.lg),
+                          Expanded(child: _EmailField()),
+                        ],
+                      ),
+                      desktop: Row(
+                        children: const [
+                          Expanded(child: _FullNameField()),
+                          SizedBox(width: AppSpacing.lg),
+                          Expanded(child: _EmailField()),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.lg),
-                    ResponsiveBuilder(
-                      builder: (context, sizing) {
-                        if (sizing.isMobile) {
-                          return Column(
-                            children: const [
-                              _PhoneField(),
-                              SizedBox(height: AppSpacing.lg),
-                              _CompanyField(),
-                            ],
-                          );
-                        }
-                        return Row(
-                          children: const [
-                            Expanded(child: _PhoneField()),
-                            SizedBox(width: AppSpacing.lg),
-                            Expanded(child: _CompanyField()),
-                          ],
-                        );
-                      },
+                    ResponsiveLayout(
+                      mobile: Column(
+                        children: const [
+                          _PhoneField(),
+                          SizedBox(height: AppSpacing.lg),
+                          _CompanyField(),
+                        ],
+                      ),
+                      tablet: Row( // Using Row for tablet
+                        children: const [
+                          Expanded(child: _PhoneField()),
+                          SizedBox(width: AppSpacing.lg),
+                          Expanded(child: _CompanyField()),
+                        ],
+                      ),
+                      desktop: Row(
+                        children: const [
+                          Expanded(child: _PhoneField()),
+                          SizedBox(width: AppSpacing.lg),
+                          Expanded(child: _CompanyField()),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     _buildSectionTitle('Tipo de consulta *'),
@@ -623,37 +849,13 @@ class _ContactFormSectionState extends State<_ContactFormSection> {
       ),
     );
   }
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-      child: Text(
-        title,
-        style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _buildRadio<T>(
-    String title,
-    T value,
-    T? groupValue,
-    ValueChanged<T?> onChanged,
-  ) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Radio<T>(value: value, groupValue: groupValue, onChanged: onChanged),
-        Text(title),
-      ],
-    );
-  }
 }
 
 // MARK: - Form Field Widgets
 
 class _FullNameField extends StatelessWidget {
   const _FullNameField();
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -667,6 +869,7 @@ class _FullNameField extends StatelessWidget {
 
 class _EmailField extends StatelessWidget {
   const _EmailField();
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -680,12 +883,13 @@ class _EmailField extends StatelessWidget {
 
 class _PhoneField extends StatelessWidget {
   const _PhoneField();
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: const InputDecoration(
         labelText: 'Teléfono',
-        hintText: '+52 (55) 1234-5678',
+        hintText: '+52 311 125 09 06',
       ),
     );
   }
@@ -693,6 +897,7 @@ class _PhoneField extends StatelessWidget {
 
 class _CompanyField extends StatelessWidget {
   const _CompanyField();
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(

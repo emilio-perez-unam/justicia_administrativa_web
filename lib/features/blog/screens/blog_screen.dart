@@ -1,10 +1,12 @@
+// ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:justicia_administrativa_web/core/constants/colors.dart';
 import 'package:justicia_administrativa_web/core/constants/spacing.dart';
 import 'package:justicia_administrativa_web/core/constants/typography.dart';
 import 'package:justicia_administrativa_web/features/blog/models/blog_post.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:justicia_administrativa_web/shared/widgets/responsive_layout.dart';
+
 
 // --- Mock Data Layer ---
 // In a real app, this would come from a CMS or API
@@ -39,7 +41,7 @@ final allPosts = [
     author: const Author(
       name: 'Ing. Daniel Moreno',
       title: 'Director de Tecnología',
-      imageUrl: 'assets/images/placeholder.png',
+      imageUrl: 'assets/images/alfredo.jpg',
     ),
     category: 'Tecnología Legal',
     categoryColor: AppColors.techBlue,
@@ -58,7 +60,7 @@ final allPosts = [
     author: const Author(
       name: 'Lic. María Fernanda López',
       title: 'Socia - Derecho Corporativo',
-      imageUrl: 'assets/images/placeholder.png',
+      imageUrl: 'assets/images/alfredo.jpg',
     ),
     category: 'Análisis de Casos',
     categoryColor: AppColors.primaryNavy,
@@ -113,11 +115,10 @@ class BlogScreen extends StatelessWidget {
                 children: [
                   _FeaturedArticle(post: featuredPost),
                   const SizedBox(height: AppSpacing.xxxl),
-                  ScreenTypeLayout.builder(
-                    mobile: (context) =>
-                        _buildMobileLayout(context, recentPosts),
-                    desktop: (context) =>
-                        _buildDesktopLayout(context, recentPosts),
+                  ResponsiveLayout(
+                    mobile: _buildMobileLayout(context, recentPosts),
+                    tablet: _buildMobileLayout(context, recentPosts), // Use mobile layout for tablet
+                    desktop: _buildDesktopLayout(context, recentPosts),
                   ),
                 ],
               ),
@@ -165,38 +166,42 @@ class _BlogHeader extends StatelessWidget {
           constraints: const BoxConstraints(
             maxWidth: AppSpacing.maxContentWidth,
           ),
-          child: ResponsiveBuilder(
-            builder: (context, sizing) {
-              final isMobile = sizing.isMobile;
-              return isMobile
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTitle(),
-                        const SizedBox(height: AppSpacing.md),
-                        _buildSearchField(),
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [_buildTitle(), _buildSearchField()],
-                    );
-            },
+          child: ResponsiveLayout(
+            mobile: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTitle(context),
+                const SizedBox(height: AppSpacing.md),
+                _buildSearchField(),
+              ],
+            ),
+            tablet: Column( // Use Column for tablet as well
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTitle(context),
+                const SizedBox(height: AppSpacing.md),
+                _buildSearchField(),
+              ],
+            ),
+            desktop: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [_buildTitle(context), _buildSearchField()],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Blog Legal', style: AppTypography.headingLarge),
+        Text('Blog Legal', style: AppTypography.headingLarge(context)),
         Text(
           'Análisis y perspectivas sobre tecnología legal y derecho administrativo',
-          style: AppTypography.bodyMedium,
+          style: AppTypography.bodyMedium(context),
         ),
       ],
     );
@@ -224,19 +229,28 @@ class _FeaturedArticle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
-      child: ScreenTypeLayout.builder(
-        mobile: (context) => Column(
+      child: ResponsiveLayout(
+        mobile: Column(
           children: [
             Image.asset(
               post.imageUrl,
-              height: 300,
+              height: 200, // Adjusted height for mobile
               width: double.infinity,
               fit: BoxFit.cover,
             ),
             _ArticleContent(post: post),
           ],
         ),
-        desktop: (context) => Row(
+        tablet: Row( // Using Row for tablet
+          children: [
+            Expanded(
+              flex: 1,
+              child: Image.asset(post.imageUrl, height: 400, fit: BoxFit.cover), // Adjusted height for tablet
+            ),
+            Expanded(flex: 1, child: _ArticleContent(post: post)),
+          ],
+        ),
+        desktop: Row(
           children: [
             Expanded(
               flex: 1,
@@ -265,22 +279,22 @@ class _ArticleContent extends StatelessWidget {
             children: [
               Chip(
                 label: Text(post.category),
-                backgroundColor: post.categoryColor.withOpacity(0.1),
-                labelStyle: AppTypography.bodySmall.copyWith(
+                backgroundColor: post.categoryColor.withAlpha(26),
+                labelStyle: AppTypography.bodySmall(context).copyWith(
                   color: post.categoryColor,
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
               Text(
                 DateFormat('d MMMM, yyyy', 'es_MX').format(post.publishedDate),
-                style: AppTypography.bodySmall,
+                style: AppTypography.bodySmall(context),
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          Text(post.title, style: AppTypography.headingMedium),
+          Text(post.title, style: AppTypography.headingMedium(context)),
           const SizedBox(height: AppSpacing.md),
-          Text(post.excerpt, style: AppTypography.bodyMedium),
+          Text(post.excerpt, style: AppTypography.bodyMedium(context)),
           const SizedBox(height: AppSpacing.lg),
           _AuthorInfo(author: post.author),
           const SizedBox(height: AppSpacing.lg),
@@ -301,7 +315,7 @@ class _MainContentColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Artículos Recientes', style: AppTypography.headingMedium),
+        Text('Artículos Recientes', style: AppTypography.headingMedium(context)),
         const SizedBox(height: AppSpacing.lg),
         ListView.separated(
           shrinkWrap: true,
@@ -340,8 +354,8 @@ class _RecentArticleCard extends StatelessWidget {
               children: [
                 Chip(
                   label: Text(post.category),
-                  backgroundColor: post.categoryColor.withOpacity(0.1),
-                  labelStyle: AppTypography.bodySmall.copyWith(
+                  backgroundColor: post.categoryColor.withAlpha(26),
+                  labelStyle: AppTypography.bodySmall(context).copyWith(
                     color: post.categoryColor,
                   ),
                 ),
@@ -351,23 +365,23 @@ class _RecentArticleCard extends StatelessWidget {
                     'd MMMM, yyyy',
                     'es_MX',
                   ).format(post.publishedDate),
-                  style: AppTypography.bodySmall,
+                  style: AppTypography.bodySmall(context),
                 ),
                 const Spacer(),
                 const Icon(Icons.timer_outlined, size: 14),
                 const SizedBox(width: AppSpacing.xs),
                 Text(
                   '${post.readTime} min de lectura',
-                  style: AppTypography.bodySmall,
+                  style: AppTypography.bodySmall(context),
                 ),
               ],
             ),
             const SizedBox(height: AppSpacing.md),
-            Text(post.title, style: AppTypography.headingSmall),
+            Text(post.title, style: AppTypography.headingSmall(context)),
             const SizedBox(height: AppSpacing.sm),
             Text(
               post.excerpt,
-              style: AppTypography.bodyMedium,
+              style: AppTypography.bodyMedium(context),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -390,6 +404,7 @@ class _Sidebar extends StatelessWidget {
     return Column(
       children: [
         _buildSidebarCard(
+          context: context,
           title: 'Autor Destacado',
           child: _AuthorInfo(
             author: allPosts[2].author, // Mock author
@@ -398,6 +413,7 @@ class _Sidebar extends StatelessWidget {
           ),
         ),
         _buildSidebarCard(
+          context: context,
           title: 'Temas Populares',
           child: Wrap(
             spacing: AppSpacing.sm,
@@ -412,16 +428,18 @@ class _Sidebar extends StatelessWidget {
           ),
         ),
         _buildSidebarCard(
+          context: context,
           title: 'Más Comentados',
           child: Column(
             children: [
-              _buildCommentedLink('La Nueva Ley de Procedimiento...'),
-              _buildCommentedLink('Análisis del Caso Pemex vs. COFECE...'),
-              _buildCommentedLink('Implementación de Sistemas RAG...'),
+              _buildCommentedLink('La Nueva Ley de Procedimiento...', context),
+              _buildCommentedLink('Análisis del Caso Pemex vs. COFECE...', context),
+              _buildCommentedLink('Implementación de Sistemas RAG...', context),
             ],
           ),
         ),
         _buildSidebarCard(
+          context: context,
           title: 'Suscríbase a nuestro boletín',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -449,7 +467,7 @@ class _Sidebar extends StatelessWidget {
     );
   }
 
-  Widget _buildSidebarCard({required String title, required Widget child}) {
+  Widget _buildSidebarCard({required String title, required Widget child, required BuildContext context}) {
     return Card(
       margin: const EdgeInsets.only(bottom: AppSpacing.lg),
       child: Padding(
@@ -457,7 +475,7 @@ class _Sidebar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: AppTypography.headingSmall),
+            Text(title, style: AppTypography.headingSmall(context)),
             const Divider(height: AppSpacing.lg),
             child,
           ],
@@ -466,7 +484,7 @@ class _Sidebar extends StatelessWidget {
     );
   }
 
-  Widget _buildCommentedLink(String title) {
+  Widget _buildCommentedLink(String title, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Row(
@@ -476,7 +494,7 @@ class _Sidebar extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: AppTypography.bodySmall.copyWith(
+              style: AppTypography.bodySmall(context).copyWith(
                 color: AppColors.techBlue,
               ),
             ),
@@ -506,18 +524,18 @@ class _AuthorInfo extends StatelessWidget {
             children: [
               Text(
                 author.name,
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.bodyMedium(context).copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(author.title, style: AppTypography.bodySmall),
+              Text(author.title, style: AppTypography.bodySmall(context)),
               if (bio != null) ...[
                 const SizedBox(height: AppSpacing.sm),
-                Text(bio!, style: AppTypography.bodySmall),
+                Text(bio!, style: AppTypography.bodySmall(context)),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   'Ver perfil completo',
-                  style: AppTypography.bodySmall.copyWith(
+                  style: AppTypography.bodySmall(context).copyWith(
                     color: AppColors.techBlue,
                   ),
                 ),
@@ -552,7 +570,7 @@ class _ArticleActions extends StatelessWidget {
           color: AppColors.textTertiary,
         ),
         const SizedBox(width: AppSpacing.xs),
-        Text('${post.viewCount}', style: AppTypography.bodySmall),
+        Text('${post.viewCount}', style: AppTypography.bodySmall(context)),
         const SizedBox(width: AppSpacing.md),
         const Icon(
           Icons.chat_bubble_outline,
@@ -560,7 +578,7 @@ class _ArticleActions extends StatelessWidget {
           color: AppColors.textTertiary,
         ),
         const SizedBox(width: AppSpacing.xs),
-        Text('${post.commentCount}', style: AppTypography.bodySmall),
+        Text('${post.commentCount}', style: AppTypography.bodySmall(context)),
       ],
     );
   }

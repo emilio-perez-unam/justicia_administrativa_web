@@ -4,7 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:justicia_administrativa_web/core/constants/colors.dart';
 import 'package:justicia_administrativa_web/core/constants/spacing.dart';
 import 'package:justicia_administrativa_web/core/constants/typography.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:justicia_administrativa_web/shared/widgets/responsive_layout.dart';
+
 
 // Simplified data model with icons
 class ServiceCategory {
@@ -257,14 +258,20 @@ class LegalServicesScreen extends HookWidget {
       child: Column(
         children: [
           _HeroSection(),
-          ScreenTypeLayout.builder(
-            mobile: (context) => _MobileLayout(
+          ResponsiveLayout(
+            mobile: _MobileLayout(
               services: _services,
               selectedIndex: selectedIndex.value,
               onCategorySelected: (index) => selectedIndex.value = index,
               selectedCategory: selectedCategory,
             ),
-            desktop: (context) => _DesktopLayout(
+            tablet: _MobileLayout( // Use mobile layout for tablet
+              services: _services,
+              selectedIndex: selectedIndex.value,
+              onCategorySelected: (index) => selectedIndex.value = index,
+              selectedCategory: selectedCategory,
+            ),
+            desktop: _DesktopLayout(
               services: _services,
               selectedIndex: selectedIndex.value,
               onCategorySelected: (index) => selectedIndex.value = index,
@@ -283,8 +290,19 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobile: _HeroSectionMobile(),
+      tablet: _HeroSectionTablet(),
+      desktop: _HeroSectionDesktop(),
+    );
+  }
+}
+
+class _HeroSectionDesktop extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 500,
+      height: 500, // Keep fixed height for desktop
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -292,7 +310,7 @@ class _HeroSection extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             AppColors.primaryNavy,
-            AppColors.primaryNavy.withOpacity(0.8),
+            AppColors.primaryNavy.withAlpha(204),
           ],
         ),
       ),
@@ -305,8 +323,8 @@ class _HeroSection extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.05),
-                  Colors.white.withOpacity(0.02),
+                  Colors.white.withAlpha(13),
+                  Colors.white.withAlpha(5),
                 ],
               ),
             ),
@@ -331,7 +349,7 @@ class _HeroSection extends StatelessWidget {
                     const SizedBox(height: AppSpacing.xl),
                     Text(
                           'Servicios Jurídicos Especializados',
-                          style: AppTypography.displayLarge.copyWith(
+                          style: AppTypography.displayLarge(context).copyWith(
                             color: Colors.white,
                             fontSize: 56,
                           ),
@@ -345,9 +363,181 @@ class _HeroSection extends StatelessWidget {
                           constraints: const BoxConstraints(maxWidth: 700),
                           child: Text(
                             'Más de 16 áreas de especialización en derecho administrativo con un equipo experto para cada necesidad',
-                            style: AppTypography.bodyLarge.copyWith(
+                            style: AppTypography.bodyLarge(context).copyWith(
                               color: Colors.white70,
                               fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                        .animate()
+                        .fadeIn(delay: 400.ms, duration: 600.ms)
+                        .slideY(begin: 0.2, end: 0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroSectionTablet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 400, // Adjusted height for tablet
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.primaryNavy,
+            AppColors.primaryNavy.withAlpha(204),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Background pattern - Removed since asset doesn't exist
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withAlpha(13),
+                  Colors.white.withAlpha(5),
+                ],
+              ),
+            ),
+          ),
+          // Content
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: AppSpacing.maxContentWidth,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.pagePadding,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.balance, size: 60, color: AppColors.accentGold) // Adjusted icon size
+                        .animate()
+                        .fadeIn(duration: 600.ms)
+                        .scale(begin: const Offset(0.8, 0.8)),
+                    const SizedBox(height: AppSpacing.xl),
+                    Text(
+                          'Servicios Jurídicos Especializados',
+                          style: AppTypography.displayLarge(context).copyWith(
+                            color: Colors.white,
+                            fontSize: 48, // Adjusted font size for tablet
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                        .animate()
+                        .fadeIn(delay: 200.ms, duration: 600.ms)
+                        .slideY(begin: 0.2, end: 0),
+                    const SizedBox(height: AppSpacing.lg),
+                    ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 700),
+                          child: Text(
+                            'Más de 16 áreas de especialización en derecho administrativo con un equipo experto para cada necesidad',
+                            style: AppTypography.bodyLarge(context).copyWith(
+                              color: Colors.white70,
+                              fontSize: 18, // Adjusted font size for tablet
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                        .animate()
+                        .fadeIn(delay: 400.ms, duration: 600.ms)
+                        .slideY(begin: 0.2, end: 0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroSectionMobile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300, // Adjusted height for mobile
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.primaryNavy,
+            AppColors.primaryNavy.withAlpha(204),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Background pattern - Removed since asset doesn't exist
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withAlpha(13),
+                  Colors.white.withAlpha(5),
+                ],
+              ),
+            ),
+          ),
+          // Content
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: AppSpacing.maxContentWidth,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.pagePadding,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.balance, size: 40, color: AppColors.accentGold) // Adjusted icon size
+                        .animate()
+                        .fadeIn(duration: 600.ms)
+                        .scale(begin: const Offset(0.8, 0.8)),
+                    const SizedBox(height: AppSpacing.xl),
+                    Text(
+                          'Servicios Jurídicos Especializados',
+                          style: AppTypography.displayLarge(context).copyWith(
+                            color: Colors.white,
+                            fontSize: 32, // Adjusted font size for mobile
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                        .animate()
+                        .fadeIn(delay: 200.ms, duration: 600.ms)
+                        .slideY(begin: 0.2, end: 0),
+                    const SizedBox(height: AppSpacing.lg),
+                    ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 700),
+                          child: Text(
+                            'Más de 16 áreas de especialización en derecho administrativo con un equipo experto para cada necesidad',
+                            style: AppTypography.bodyLarge(context).copyWith(
+                              color: Colors.white70,
+                              fontSize: 16, // Adjusted font size for mobile
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -384,60 +574,59 @@ class _DesktopLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.background,
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(
             maxWidth: AppSpacing.maxContentWidth,
           ),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.8, // Fixed height
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Sidebar
-                Container(
-                  width: 350,
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        child: Text(
-                          'Áreas de Práctica',
-                          style: AppTypography.headingMedium,
-                        ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Sidebar
+              Container(
+                width: 350,
+                height: MediaQuery.of(context).size.height * 0.7,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      child: Text(
+                        'Áreas de Práctica',
+                        style: AppTypography.headingMedium(context),
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: services.length,
-                          itemBuilder: (context, index) {
-                            final service = services[index];
-                            final isSelected = index == selectedIndex;
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: services.length,
+                        itemBuilder: (context, index) {
+                          final service = services[index];
+                          final isSelected = index == selectedIndex;
 
-                            return _ServiceListTile(
-                              service: service,
-                              isSelected: isSelected,
-                              onTap: () => onCategorySelected(index),
-                            ).animate().fadeIn(
-                              delay: (50 * index).ms,
-                              duration: 400.ms,
-                            );
-                          },
-                        ),
+                          return _ServiceListTile(
+                            service: service,
+                            isSelected: isSelected,
+                            onTap: () => onCategorySelected(index),
+                          ).animate().fadeIn(
+                            delay: (50 * index).ms,
+                            duration: 400.ms,
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                // Detail View
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: _ServiceDetailView(
-                      category: selectedCategory,
-                    ).animate().fadeIn().slideX(begin: 0.1, end: 0),
-                  ),
+              ),
+              // Detail View
+              Expanded(
+                child: SingleChildScrollView(
+                  child: _ServiceDetailView(
+                    category: selectedCategory,
+                  ).animate().fadeIn().slideX(begin: 0.1, end: 0),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -469,7 +658,7 @@ class _MobileLayout extends StatelessWidget {
           // Category Grid
           Text(
             'Seleccione un área de práctica',
-            style: AppTypography.headingMedium,
+            style: AppTypography.headingMedium(context),
           ),
           const SizedBox(height: AppSpacing.lg),
           GridView.builder(
@@ -527,7 +716,7 @@ class _ServiceListTile extends StatelessWidget {
         vertical: AppSpacing.xs,
       ),
       child: Material(
-        color: isSelected ? service.color.withOpacity(0.1) : Colors.transparent,
+        color: isSelected ? service.color.withAlpha(26) : Colors.transparent,
         borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
         child: InkWell(
           onTap: onTap,
@@ -547,7 +736,7 @@ class _ServiceListTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(AppSpacing.sm),
                   decoration: BoxDecoration(
-                    color: service.color.withOpacity(0.1),
+                    color: service.color.withAlpha(26),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusSmall),
                   ),
                   child: Icon(service.icon, color: service.color, size: 20),
@@ -556,7 +745,7 @@ class _ServiceListTile extends StatelessWidget {
                 Expanded(
                   child: Text(
                     service.title,
-                    style: AppTypography.bodyMedium.copyWith(
+                    style: AppTypography.bodyMedium(context).copyWith(
                       color: isSelected ? service.color : AppColors.textPrimary,
                       fontWeight: isSelected
                           ? FontWeight.bold
@@ -607,7 +796,7 @@ class _ServiceGridCard extends StatelessWidget {
               const SizedBox(height: AppSpacing.sm),
               Text(
                 service.title,
-                style: AppTypography.bodySmall.copyWith(
+                style: AppTypography.bodySmall(context).copyWith(
                   color: isSelected ? Colors.white : AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -639,7 +828,7 @@ class _ServiceDetailView extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -655,7 +844,7 @@ class _ServiceDetailView extends StatelessWidget {
                 padding: const EdgeInsets.all(AppSpacing.md),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [category.color, category.color.withOpacity(0.8)],
+                    colors: [category.color, category.color.withAlpha(204)],
                   ),
                   borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
                 ),
@@ -668,13 +857,13 @@ class _ServiceDetailView extends StatelessWidget {
                   children: [
                     Text(
                       category.title,
-                      style: AppTypography.headingLarge.copyWith(
+                      style: AppTypography.headingLarge(context).copyWith(
                         color: category.color,
                       ),
                     ),
                     Text(
                       '${category.details.length} servicios especializados',
-                      style: AppTypography.bodySmall.copyWith(
+                      style: AppTypography.bodySmall(context).copyWith(
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -688,7 +877,7 @@ class _ServiceDetailView extends StatelessWidget {
             height: 4,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [category.color, category.color.withOpacity(0.1)],
+                colors: [category.color, category.color.withAlpha(26)],
               ),
               borderRadius: BorderRadius.circular(2),
             ),
@@ -703,7 +892,7 @@ class _ServiceDetailView extends StatelessWidget {
                 .animate()
                 .fadeIn(delay: (50 * index).ms, duration: 400.ms)
                 .slideX(begin: 0.1, end: 0);
-          }).toList(),
+          }),
           const SizedBox(height: AppSpacing.xxxl),
           // CTA Button
           Center(
@@ -753,7 +942,7 @@ class _ServiceItem extends StatelessWidget {
         color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.radiusSmall),
         border: Border(
-          left: BorderSide(color: color.withOpacity(0.3), width: 3),
+          left: BorderSide(color: color.withAlpha(77), width: 3),
         ),
       ),
       child: Row(
@@ -764,7 +953,7 @@ class _ServiceItem extends StatelessWidget {
             child: Icon(Icons.check_circle, size: 20, color: color),
           ),
           const SizedBox(width: AppSpacing.md),
-          Expanded(child: Text(text, style: AppTypography.bodyMedium)),
+          Expanded(child: Text(text, style: AppTypography.bodyMedium(context))),
         ],
       ),
     );

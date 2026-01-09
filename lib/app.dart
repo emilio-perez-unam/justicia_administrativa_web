@@ -9,7 +9,7 @@ class JusticiaAdministrativaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Justicia Administrativa',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.lightTheme(context),
       routerConfig: AppRoutes.router,
       debugShowCheckedModeBanner: false,
     );

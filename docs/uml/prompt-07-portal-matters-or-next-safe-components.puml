@@ -1,0 +1,47 @@
+@startuml Prompt07PortalMattersComponents
+title Prompt 07 Portal Matters Component Split
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "Portal matters" {
+  component "MattersView\nstate and orchestration boundary" as MattersView
+  component "MattersPageHeader" as Header
+  component "MattersFilterBar" as FilterBar
+  component "MattersList" as MattersList
+  component "MatterCard" as MatterCard
+}
+
+package "Portal data and services" {
+  rectangle "Matter" as Matter <<entity>>
+  component "PortalService" as PortalService
+  component "FuzzySearchService" as FuzzySearch
+  component "ReportService" as ReportService
+}
+
+package "Presentation support" {
+  component "PdfPreviewModal" as PdfPreview
+  component "SliverPinnedHeader" as PinnedHeader
+  component "AppThemeExtension" as Theme
+  component "context menu callbacks" as ContextMenu
+}
+
+MattersView --> PortalService : load matters
+MattersView --> FuzzySearch : index matters
+MattersView --> ReportService : build report bytes
+MattersView --> PdfPreview : preview report
+MattersView --> Header
+MattersView --> PinnedHeader
+MattersView --> FilterBar : search and status callbacks
+MattersView --> MattersList : filter state and preview callback
+
+FilterBar --> Theme : design tokens
+MattersList --> FuzzySearch : query indexed matters
+MattersList --> Matter : filtered collection
+MattersList --> MatterCard
+MatterCard --> Matter : card summary
+MatterCard --> ContextMenu : preview action
+MatterCard --> Theme : design tokens
+
+@enduml

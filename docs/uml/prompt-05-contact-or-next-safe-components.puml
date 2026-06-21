@@ -1,0 +1,56 @@
+@startuml Prompt05ContactComponents
+title Prompt 05 Contact Section Component Split
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "Contact section" {
+  component "ContactSection\ncomposition boundary" as ContactSection
+  component "_ContactHeader" as Header
+  component "_OfficesSection" as Offices
+  component "_ContactFormSection" as Form
+}
+
+package "Contact offices" {
+  component "_OfficeCard" as OfficeCard
+  component "_OfficeCardHeader" as OfficeHeader
+  component "_OfficeCardBody" as OfficeBody
+  component "_OfficeInfoRow" as OfficeInfo
+  component "_PracticeTags" as Tags
+  rectangle "_OfficeData\n- city\n- role\n- address\n- phone\n- contact details\n- tags" as OfficeData <<value object>>
+}
+
+package "Contact form" {
+  component "_TextInput" as TextInput
+  component "toastification feedback" as Toast
+  component "Form validation state" as FormState
+}
+
+package "Design dependencies" {
+  component "SectionContainer" as SectionContainer
+  component "AppThemeExtension" as Theme
+  component "Brand colors" as Brand
+}
+
+ContactSection --> Header
+ContactSection --> Offices
+ContactSection --> Form
+ContactSection --> SectionContainer
+
+Offices --> OfficeData
+Offices --> OfficeCard
+OfficeCard --> OfficeHeader
+OfficeCard --> OfficeBody
+OfficeBody --> OfficeInfo
+OfficeBody --> Tags
+OfficeCard --> Theme
+OfficeCard --> Brand
+
+Form --> TextInput
+Form --> FormState
+Form --> Toast
+Form --> Theme
+Form --> Brand
+
+@enduml

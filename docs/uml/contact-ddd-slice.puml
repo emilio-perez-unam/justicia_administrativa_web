@@ -1,0 +1,74 @@
+@startuml
+' Class diagram of the contact bounded context (Phase 3.A).
+' Pure class diagram: unquoted generics, no quoted-generic-with-body.
+title Contact bounded context — domains/contact (Phase 3.A)
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "core/error" {
+  class Result<T> <<sealed>>
+  abstract class Failure <<sealed>>
+}
+
+package "domains/contact/domain" {
+  class PersonName <<value object>> {
+    +value: String
+    +create(String): Result<PersonName>
+  }
+  class EmailAddress <<value object>> {
+    +value: String
+    +create(String): Result<EmailAddress>
+  }
+  class ContactMessage <<value object>> {
+    +value: String
+    +create(String): Result<ContactMessage>
+  }
+  class ContactInquiry <<entity>> {
+    +isUrgent: bool
+    +contactMethod: String
+    +toInsert(): Map
+  }
+  ContactInquiry o--> PersonName
+  ContactInquiry o--> EmailAddress
+  ContactInquiry o--> ContactMessage
+}
+
+package "domains/contact/application" {
+  interface ContactInquiryRepository <<port>> {
+    +submit(ContactInquiry): Future<Result<ContactInquiry>>
+  }
+  class SubmitContactInquiryUseCase {
+    +call(ContactInquiry): Future<Result<ContactInquiry>>
+  }
+  SubmitContactInquiryUseCase --> ContactInquiryRepository
+}
+
+package "domains/contact/infrastructure" {
+  class SupabaseContactInquiryRepository
+  class contact_inquiries <<Supabase table\nRLS: anon INSERT>>
+  SupabaseContactInquiryRepository ..|> ContactInquiryRepository
+  SupabaseContactInquiryRepository --> contact_inquiries : insert (return=minimal)
+}
+
+package "domains/contact/actors" {
+  class ContactFormActor <<ChangeNotifier>> {
+    +status: ContactFormStatus
+    +failure: Failure?
+    +submit(ContactInquiry)
+    +reset()
+  }
+  ContactFormActor --> SubmitContactInquiryUseCase
+}
+
+package "lib/app/components/contact" {
+  class ContactFormSection <<StatefulWidget>>
+  ContactFormSection --> ContactFormActor : submit / observe status
+  ContactFormSection ..> ContactInquiry : builds + validates value objects
+}
+
+PersonName ..> Result
+EmailAddress ..> Result
+SubmitContactInquiryUseCase ..> ContactInquiry
+SupabaseContactInquiryRepository ..> Failure : maps errors
+@enduml

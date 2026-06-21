@@ -1,0 +1,61 @@
+@startuml
+' Phase 5 portal DDD extractions: billing / documents / matters now have
+' bounded contexts whose Supabase adapters delegate to the legacy static
+' PortalService (strangler), returning Result<T>. Views load via use cases.
+title Portal bounded contexts (Phase 5 extractions)
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+class "PortalService" as PS <<legacy static facade>> {
+  +getInvoices()
+  +getDocuments() / uploadDocument()
+  +getMatters()
+  +getRecentMessages() / getUpcomingEvents() ...
+}
+
+package "domains/billing" {
+  interface BillingRepository <<port>>
+  class LoadInvoicesUseCase
+  class PortalServiceBillingRepository
+  LoadInvoicesUseCase --> BillingRepository
+  PortalServiceBillingRepository ..|> BillingRepository
+  PortalServiceBillingRepository --> PS
+}
+package "domains/documents" {
+  interface DocumentsRepository <<port>>
+  class LoadDocumentsUseCase
+  class UploadDocumentUseCase
+  class PortalServiceDocumentsRepository
+  LoadDocumentsUseCase --> DocumentsRepository
+  UploadDocumentUseCase --> DocumentsRepository
+  PortalServiceDocumentsRepository ..|> DocumentsRepository
+  PortalServiceDocumentsRepository --> PS
+}
+package "domains/matters" {
+  interface MattersRepository <<port>>
+  class LoadMattersUseCase
+  class PortalServiceMattersRepository
+  LoadMattersUseCase --> MattersRepository
+  PortalServiceMattersRepository ..|> MattersRepository
+  PortalServiceMattersRepository --> PS
+}
+
+package "lib/app/components/portal (views)" {
+  class BillingView
+  class DocumentsView
+  class MattersView
+  BillingView --> LoadInvoicesUseCase : FutureResultView loader (getIt)
+  DocumentsView --> LoadDocumentsUseCase
+  DocumentsView --> UploadDocumentUseCase
+  MattersView --> LoadMattersUseCase : fetch + fuzzy re-index
+}
+
+note bottom of PS
+  Strangler: PortalService is left intact; each new
+  context delegates to it and returns Result<T>, so
+  callers move off the static facade incrementally.
+  (Already extracted earlier: portal_messaging,
+  portal_calendar, blog, contact.)
+end note
+@enduml

@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+
+\title{Prompt 02 Home View Refactor}
+\author{Codex}
+\date{2026-05-12}
+
+\begin{document}
+\maketitle
+
+\section{Scope Lock}
+Prompt 02 is limited to the live Justicia Administrativa website under \texttt{001-apps/001-site}. Repository-level files and deprecated prototype apps were read only to confirm deployment and route context. No root documentation, Laravel, Filament, ArgumentaLab, mobile, export, or \texttt{001-apps/002-web} files are part of this slice.
+
+\section{Selected File}
+\texttt{lib/app/views/home\_view.dart} was selected because it was the next known live-site hand-authored source file over 500 lines. The file mixed page composition, section-level layout, local view data, card hover behavior, route navigation, and animation details.
+
+\section{Component Boundaries}
+After the split, \texttt{HomeView} composes the homepage in route order: \texttt{HeroSection}, \texttt{HomeDualExpertiseSection}, and \texttt{HomePreviewCardsSection}. The dual expertise component owns the value-proposition layout and local pillar data. The preview cards component owns the responsive card grid, hover state, and route navigation.
+
+\section{UI and UX Preservation}
+The refactor preserves the existing brand language: navy and gold accents, serif headings, legal-and-technology positioning, hover motion, staggered fades, and desktop/tablet/mobile layout rules. No new font, palette, or generic SaaS visual treatment was introduced.
+
+\section{Architecture Notes}
+This is a presentation-only slice. DDD concepts are intentionally limited to preserving a clean page-composition boundary; no domain abstraction was introduced. OOP is used for small immutable, private view-data classes. No actor-model abstraction was needed because the slice has no asynchronous or concurrent workflow.
+
+\section{Validation Results}
+\begin{itemize}[leftmargin=*]
+  \item \texttt{dart format}: passed for touched Dart files after rerunning with permission to let the Flutter SDK update its cache.
+  \item \texttt{flutter analyze}: passed with no issues.
+  \item \texttt{flutter test}: passed, four widget tests.
+  \item \texttt{flutter build web}: passed and produced \texttt{build/web}; existing package-level Wasm dry-run warnings were reported for \texttt{desktop\_drop}, \texttt{speech\_to\_text}, and \texttt{image}.
+  \item Line-count check: \texttt{home\_view.dart} 22 lines, \texttt{home\_dual\_expertise\_section.dart} 268 lines, \texttt{home\_preview\_cards\_section.dart} 217 lines.
+  \item \texttt{git diff --check}: passed for touched site files.
+\end{itemize}
+
+\section{Remaining Live-Site Files Over 500 Lines}
+No non-generated Dart source file under \texttt{001-apps/001-site/lib} remained over 500 total lines in the final scan.
+
+\end{document}

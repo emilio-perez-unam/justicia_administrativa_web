@@ -1,0 +1,58 @@
+@startuml Prompt04NearThresholdComponents
+title Prompt 04 Portal Sidebar Component Split
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "001-apps/001-site/lib/app/components/portal" {
+  component "PortalSidebar\ncomposition boundary" as PortalSidebar
+
+  package "sidebar" {
+    component "PortalSidebarProfile" as Profile
+    component "PortalSidebarNavigation" as Navigation
+    component "PortalSidebarFooter" as Footer
+
+    rectangle "_PortalNavigationItem\n- icon: IconData\n- label: String\n- badge: String?" as NavItem <<value object>>
+
+    component "_PortalNavItem" as NavTile
+    component "_AiConversationList" as AiList
+    component "_AiConversationTile" as AiTile
+  }
+}
+
+package "Core / App boundary" {
+  component "AppRouter.authNotifier" as Auth
+  component "ChatService.getConversations()" as ChatService
+  component "CacheConfig.instance" as CacheConfig
+  component "Brand color tokens\nnavy + gold" as BrandTokens
+}
+
+PortalSidebar --> Profile
+PortalSidebar --> Navigation
+PortalSidebar --> Footer
+
+Profile --> Auth : display name, email, avatar
+Profile --> CacheConfig : cached avatar image
+
+Navigation --> NavItem : private local view data
+Navigation --> NavTile
+Navigation --> AiList : shown on AI tab
+Navigation --> Auth : admin menu visibility
+Navigation --> ChatService : conversation history
+AiList --> AiTile
+
+PortalSidebar --> BrandTokens
+Profile --> BrandTokens
+Navigation --> BrandTokens
+Footer --> BrandTokens
+
+PortalSidebar ..> Navigation : tab/chat callbacks
+PortalSidebar ..> Footer : logout callback
+
+note bottom
+  Scope lock: only 001-apps/001-site was changed.
+  No ArgumentaLab, Laravel, Filament, 002-clients, 002-web,
+  mobile, exports, root docs, or root files are part of this diagram.
+end note
+@enduml

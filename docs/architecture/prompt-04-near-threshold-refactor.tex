@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setmainfont{Latin Modern Roman}
+\setlist[itemize]{leftmargin=1.4em}
+
+\title{Prompt 04 Near-Threshold Refactor}
+\author{Justicia Administrativa Live Site}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section*{Scope Lock}
+Prompt 04 was limited to \texttt{001-apps/001-site/**}. The live
+\texttt{new.justiciadministrativa.com} site is served from
+\texttt{001-apps/001-site}; \texttt{001-apps/002-web} was not modified and
+remains prototype/reference material only. ArgumentaLab, Laravel, Filament,
+\texttt{002-clients/**}, mobile, exports, root docs, and root files were not
+modified.
+
+\section*{Prompt 03 Sequencing}
+Prompt 03 artifacts were not detected. The Prompt 03 architecture note,
+Prompt 03 UML file, and Prompt 03 refactor-log entry were missing. The run
+therefore selected the longest safe near-threshold file from the current
+Prompt 04 audit rather than assuming Prompt 03 had completed.
+
+\section*{Selected File}
+\texttt{lib/app/components/portal/portal\_sidebar.dart} was selected. It was
+the longest clean tracked candidate at 461 lines. Longer candidates such as
+\texttt{contact/contact\_offices.dart}, \texttt{portal/messages\_view.dart},
+\texttt{portal/matters\_view.dart}, and \texttt{ai\_assistant/chat\_area.dart}
+were skipped because they already had pre-existing dirty or untracked
+site-local work that could not be cleanly isolated for this focused slice.
+
+\section*{Component Boundaries}
+\begin{itemize}
+  \item \texttt{PortalSidebar} now owns only sidebar composition, shared brand
+  colors, and callback wiring.
+  \item \texttt{PortalSidebarProfile} owns signed-in user identity, avatar
+  rendering, cached avatar loading, and the presence marker.
+  \item \texttt{PortalSidebarNavigation} owns tab rows, admin-only menu
+  visibility, AI conversation history, and local immutable menu item data.
+  \item \texttt{PortalSidebarFooter} owns logout and version presentation.
+\end{itemize}
+
+\section*{UI and Accessibility}
+The refactor preserved the portal navy and gold palette, spacing, tab labels,
+badges, AI history behavior, logout treatment, avatar fallback behavior, and
+version text. It added semantic labels for sidebar navigation, AI chat actions,
+conversation tiles, and logout without changing the visible design.
+
+\section*{Validation Results}
+\begin{itemize}
+  \item \texttt{dart format} on touched Dart files: passed after an escalated
+  rerun for the shared Flutter cache.
+  \item \texttt{flutter analyze}: passed with no issues after an escalated
+  rerun for the shared Flutter cache.
+  \item \texttt{flutter test}: passed, four tests.
+  \item \texttt{flutter build web}: passed; existing dependency Wasm dry-run
+  warnings from \texttt{desktop\_drop}, \texttt{speech\_to\_text}, and
+  \texttt{image} were reported.
+  \item Touched Dart line counts: 59, 166, 396, and 67 lines.
+  \item Import/usage grep found the extracted sidebar components referenced
+  from \texttt{portal\_sidebar.dart}.
+\end{itemize}
+
+\section*{Remaining Files at or Above 430 Lines}
+\begin{itemize}
+  \item 493: \texttt{lib/app/components/contact/contact\_offices.dart}
+  \item 489: \texttt{lib/app/components/portal/messages\_view.dart}
+  \item 480: \texttt{lib/app/components/portal/matters\_view.dart}
+  \item 471: \texttt{lib/app/components/ai\_assistant/chat\_area.dart}
+  \item 460: \texttt{lib/app/components/portal/calendar\_view.dart}
+  \item 440: \texttt{lib/app/components/blog/blog\_feed.dart}
+  \item 432: \texttt{lib/app/components/contact/contact\_form.dart}
+\end{itemize}
+
+\end{document}

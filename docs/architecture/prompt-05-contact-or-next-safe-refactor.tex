@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setmainfont{Latin Modern Roman}
+\setlist[itemize]{leftmargin=1.4em}
+
+\title{Prompt 05 Contact Section Refactor}
+\author{Justicia Administrativa Live Site}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section*{Scope Lock}
+Prompt 05 was limited to \texttt{001-apps/001-site/**}. The live
+\texttt{new.justiciadministrativa.com} website continues to be served from
+\texttt{001-apps/001-site}. \texttt{001-apps/002-web} was not modified and
+remains prototype/reference material only. ArgumentaLab, Laravel, Filament,
+\texttt{002-clients/**}, mobile, generated exports, root docs, and root files
+were not modified.
+
+\section*{Prompt 04 Handoff}
+Prompt 04 commit
+\texttt{7f8cdd8a78763539191b67e223608a3354acfb82} was present and contained
+only \texttt{001-apps/001-site/**} paths. It split the portal sidebar into a
+composition file plus focused profile, navigation, and footer components.
+
+\section*{Contact Ownership Audit}
+The contact section was selected because the dirty and untracked contact files
+formed one coherent site-local slice. \texttt{contact.dart} was already reduced
+to section composition and referenced \texttt{contact/contact\_offices.dart}
+and \texttt{contact/contact\_form.dart} as part files. Those part files held
+the moved office and form code from the original contact component, with no
+unrelated work detected.
+
+\section*{Component Boundaries}
+\begin{itemize}
+  \item \texttt{contact.dart} remains the public contact composition boundary.
+  \item \texttt{contact\_offices.dart} owns the hero, map treatment, office
+  section heading, and responsive office-card grid.
+  \item \texttt{contact\_section\_models.dart} owns private contact-section
+  view data for office locations.
+  \item \texttt{contact\_office\_card.dart} owns a single office card, contact
+  detail rows, practice tags, and the office CTA.
+  \item \texttt{contact\_form.dart} owns form state, validation flow,
+  submission feedback, and reset behavior.
+  \item \texttt{contact\_form\_fields.dart} owns local text input rendering and
+  validation rules.
+\end{itemize}
+
+\section*{UI and Accessibility}
+The refactor preserved contact copy, office details, office ordering, form
+labels, dropdown choices, urgent flag, preferred-contact controls, animations,
+spacing, and brand colors. It added semantic labels for office address, phone,
+WhatsApp, email, hours, parking, office contact CTA, and form submit actions
+without changing the visible design.
+
+\section*{Validation Results}
+\begin{itemize}
+  \item \texttt{dart format} on touched Dart files: passed after an escalated
+  rerun for the shared Flutter cache.
+  \item \texttt{flutter analyze}: passed with no issues.
+  \item \texttt{flutter test}: passed, four tests.
+  \item \texttt{flutter build web}: passed; existing dependency Wasm dry-run
+  warnings from \texttt{desktop\_drop}, \texttt{speech\_to\_text}, and
+  \texttt{image} were reported.
+  \item Touched Dart line counts: 66, 170, 305, 88, 382, and 60 lines.
+  \item Import/part usage grep found the extracted contact components
+  referenced from the contact section.
+\end{itemize}
+
+\section*{Remaining Files at or Above 430 Lines}
+\begin{itemize}
+  \item 489: \texttt{lib/app/components/portal/messages\_view.dart}
+  \item 480: \texttt{lib/app/components/portal/matters\_view.dart}
+  \item 471: \texttt{lib/app/components/ai\_assistant/chat\_area.dart}
+  \item 460: \texttt{lib/app/components/portal/calendar\_view.dart}
+  \item 440: \texttt{lib/app/components/blog/blog\_feed.dart}
+\end{itemize}
+
+\end{document}

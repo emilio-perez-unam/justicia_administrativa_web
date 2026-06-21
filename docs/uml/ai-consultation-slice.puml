@@ -1,0 +1,71 @@
+@startuml
+' AI-assistant consultation slice (Phase 3.D).
+title AI consultation slice — domains/ai_consultation (Phase 3.D)
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "core/error" {
+  class Result<T> <<sealed>>
+  abstract class Failure <<sealed>>
+}
+
+package "domains/ai_consultation/application" {
+  interface AiConsultationRepository <<port>> {
+    +sendMessage(content, conversationId?, ...): Future<Result<ChatResponse>>
+  }
+  class SendConsultationMessageUseCase {
+    +call(...): Future<Result<ChatResponse>>
+  }
+  SendConsultationMessageUseCase --> AiConsultationRepository
+}
+
+package "domains/ai_consultation/infrastructure" {
+  class SupabaseAiConsultationRepository
+  SupabaseAiConsultationRepository ..|> AiConsultationRepository
+  note right of SupabaseAiConsultationRepository
+    Auth guard: returns AuthFailure
+    ("Inicia sesión...") when no current
+    user, before calling the function.
+  end note
+}
+
+package "core/services" {
+  class ChatService <<static>> {
+    +sendMessage(): ChatResponse
+  }
+  class "chat (edge fn)" as Edge <<Supabase Deno>>
+  SupabaseAiConsultationRepository --> ChatService : delegates (if authed)
+  ChatService --> Edge : functions.invoke('chat')
+}
+
+package "domains/ai_consultation/actors" {
+  class AiConsultationActor <<ChangeNotifier>> {
+    +status; +failure; +lastResponse
+    +send(...)
+  }
+  AiConsultationActor --> SendConsultationMessageUseCase
+}
+
+package "lib/app/components/ai_assistant" {
+  class AiAssistantView <<StatefulWidget>>
+  class ChatArea <<HookWidget>>
+  class SidebarRight <<widget>>
+  AiAssistantView --> ChatArea : hosts; onSourcesUpdated → setState(_sources)
+  AiAssistantView --> SidebarRight : sources (Fuentes y Contexto)
+  ChatArea --> SendConsultationMessageUseCase : send; fold → bubble | typed error+retry
+}
+note right of AiAssistantView
+  Lifts assistant retrieval sources so the
+  sidebar populates. The "inicia sesión" demo
+  banner was removed — the route is auth-gated,
+  so every viewer is already authenticated.
+end note
+
+SendConsultationMessageUseCase ..> Result
+SupabaseAiConsultationRepository ..> Failure : maps errors
+note bottom of ChatArea
+  On failure: restores the typed text and
+  shows failure.message (no canned string).
+end note
+@enduml

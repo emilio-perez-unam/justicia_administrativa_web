@@ -1,0 +1,50 @@
+@startuml Prompt08AiChatComponents
+title Prompt 08 AI Assistant Chat Component Split
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "AI assistant chat" {
+  component "ChatArea\nhook state and side-effect boundary" as ChatArea
+  component "ChatMessageList" as MessageList
+  component "ChatEmptyState" as EmptyState
+  component "ChatComposer" as Composer
+  component "ChatDropOverlay" as DropOverlay
+  component "ChatMessage\nexisting bubble component" as ChatMessage
+}
+
+package "AI chat data and services" {
+  rectangle "Message" as Message <<entity>>
+  component "ChatService" as ChatService
+  component "VoiceService" as VoiceService
+  component "FilePicker" as FilePicker
+  component "DropTarget" as DropTarget
+}
+
+package "App boundaries" {
+  component "toastification feedback" as Toast
+  component "source callback" as SourceCallback
+  component "conversation callback" as ConversationCallback
+  component "brand/theme styling" as Brand
+}
+
+ChatArea --> ChatService : load/send/upload
+ChatArea --> VoiceService : initialize/listen/stop
+ChatArea --> FilePicker : choose attachment
+ChatArea --> DropTarget : drag-and-drop files
+ChatArea --> Toast : upload/pick errors
+ChatArea --> SourceCallback : assistant sources
+ChatArea --> ConversationCallback : new conversation id
+ChatArea --> MessageList
+ChatArea --> Composer
+ChatArea --> DropOverlay
+
+MessageList --> Message : transcript
+MessageList --> ChatMessage : message bubble rendering
+MessageList --> EmptyState : no messages
+Composer --> ChatArea : send/upload/voice callbacks
+Composer --> Brand : control styling
+DropOverlay --> Brand : drag affordance styling
+
+@enduml

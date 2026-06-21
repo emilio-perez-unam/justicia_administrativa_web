@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setmainfont{Latin Modern Roman}
+\setlist[itemize]{leftmargin=1.4em}
+
+\title{Prompt 07 Portal Matters Refactor}
+\author{Justicia Administrativa Live Site}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section*{Scope Lock}
+Prompt 07 was limited to \texttt{001-apps/001-site/**}. The live
+\texttt{new.justiciadministrativa.com} website continues to be served from
+\texttt{001-apps/001-site}. \texttt{001-apps/002-web} was not modified and
+remains prototype/reference material only. ArgumentaLab, Laravel, Filament,
+\texttt{002-clients/**}, mobile, generated exports, root docs, and root files
+were not modified.
+
+\section*{Prompt 06 Handoff}
+Prompt 06 commit
+\texttt{0edf1075bcf19fd1ba5f31aa806ed69a0d79ef76} was present and contained
+only \texttt{001-apps/001-site/**} paths. It split the portal messages view and
+left \texttt{matters\_view.dart} as the longest remaining near-threshold
+live-site Dart file.
+
+\section*{Matters Ownership Audit}
+\texttt{matters\_view.dart} was selected because it was dirty only with
+coherent, matter-specific, site-local changes. No existing
+\texttt{portal/matters/**} files were present, so the extraction could proceed
+without absorbing unrelated site-local work.
+
+\section*{Component Boundaries}
+\begin{itemize}
+  \item \texttt{matters\_view.dart} remains the stateful page boundary. It owns
+  matter loading, fuzzy-search indexing, search debounce, status state, and PDF
+  preview orchestration.
+  \item \texttt{matters\_page\_header.dart} owns the page title and desktop
+  primary action.
+  \item \texttt{matters\_filter\_bar.dart} owns the responsive search field and
+  status chips.
+  \item \texttt{matters\_list.dart} owns list filtering, loading skeletons,
+  empty state, and sliver list composition.
+  \item \texttt{matter\_card.dart} owns matter summary presentation, status
+  facts, context-menu actions, report-preview callback wiring, and animation.
+\end{itemize}
+
+\section*{UI and Accessibility}
+The refactor preserved the matter list hierarchy, pinned filter surface, fuzzy
+search behavior, status filters, report preview affordance, context menu,
+card animation, desktop/mobile layout, and brand tokens. A semantic label was
+added to each matter card so screen-reader users get title, expediente, and
+status context without changing the visual design.
+
+\section*{Architecture Notes}
+This slice uses composition and presentational component extraction rather than
+new domain abstractions. \texttt{Matter} remains the existing UI data contract.
+No new ADTs, repositories, services, or global view models were introduced.
+Actor-model abstractions were not needed: asynchronous work is limited to the
+page boundary loading matters and opening report previews through explicit
+callbacks.
+
+\section*{Validation Results}
+\begin{itemize}
+  \item \texttt{dart format} on touched Dart files: passed after an escalated
+  run for the shared Flutter cache.
+  \item \texttt{flutter analyze}: passed with no issues.
+  \item \texttt{flutter test}: passed, four tests.
+  \item \texttt{flutter build web}: passed; existing dependency Wasm dry-run
+  warnings from \texttt{desktop\_drop}, \texttt{speech\_to\_text}, and
+  \texttt{image} were reported.
+  \item Touched Dart line counts: 104, 48, 201, 117, and 221 lines.
+  \item Extracted-component usage grep found the new matters components
+  referenced from the matters view and list composition.
+\end{itemize}
+
+\section*{Remaining Files at or Above 430 Lines}
+\begin{itemize}
+  \item 471: \texttt{lib/app/components/ai\_assistant/chat\_area.dart}
+  \item 460: \texttt{lib/app/components/portal/calendar\_view.dart}
+  \item 440: \texttt{lib/app/components/blog/blog\_feed.dart}
+\end{itemize}
+
+\end{document}

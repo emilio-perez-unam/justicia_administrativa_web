@@ -1,11 +1,11 @@
 {
-    "name": "justicia_administrativa_web",
-    "short_name": "justicia_administrativa_web",
+    "name": "JusticIA Administrativa",
+    "short_name": "JusticIA",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1A365D",
+    "theme_color": "#1A365D",
+    "description": "Plataforma legal con inteligencia artificial",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

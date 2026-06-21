@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setmainfont{Latin Modern Roman}
+\setlist[itemize]{leftmargin=1.4em}
+
+\title{Prompt 06 Portal Messages Refactor}
+\author{Justicia Administrativa Live Site}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section*{Scope Lock}
+Prompt 06 was limited to \texttt{001-apps/001-site/**}. The live
+\texttt{new.justiciadministrativa.com} website continues to be served from
+\texttt{001-apps/001-site}. \texttt{001-apps/002-web} was not modified and
+remains prototype/reference material only. ArgumentaLab, Laravel, Filament,
+\texttt{002-clients/**}, mobile, generated exports, root docs, and root files
+were not modified.
+
+\section*{Prompt 05 Handoff}
+Prompt 05 commit
+\texttt{449f0fda818a8e2765802e99dbb2cb99462be184} was present and contained
+only \texttt{001-apps/001-site/**} paths. It stabilized the contact section
+split and left \texttt{messages\_view.dart} as the longest remaining
+near-threshold live-site Dart file.
+
+\section*{Messages Ownership Audit}
+\texttt{messages\_view.dart} was selected because the file was dirty only with
+coherent, message-specific, site-local changes. No existing
+\texttt{portal/messages/**} files were present, so the extraction could proceed
+without absorbing unrelated site-local work.
+
+\section*{Component Boundaries}
+\begin{itemize}
+  \item \texttt{messages\_view.dart} remains the stateful page boundary. It
+  owns selected-matter state, service calls, refresh behavior, current-user
+  lookup, controller disposal, and toast feedback.
+  \item \texttt{messages\_sidebar.dart} owns matter-list rendering, selected
+  conversation affordances, and the sidebar empty state.
+  \item \texttt{messages\_empty\_state.dart} owns the no-selection prompt.
+  \item \texttt{messages\_thread\_panel.dart} owns the thread layout and
+  composes the header, reversed message list, and composer.
+  \item \texttt{messages\_thread\_header.dart} owns the selected matter title
+  and voice/video call affordances.
+  \item \texttt{messages\_composer.dart} owns the local message input surface.
+  \item \texttt{message\_bubble.dart} owns sent/received bubble presentation,
+  call-link styling, timestamp formatting, semantics, and animation.
+\end{itemize}
+
+\section*{UI and Accessibility}
+The refactor preserved the portal message hierarchy, matter selection behavior,
+conversation ordering, desktop/mobile split, composer layout, call actions,
+animation behavior, and brand tokens. Semantic labels were kept local to
+interactive conversation rows and message bubbles so screen-reader context
+improves without adding visual clutter.
+
+\section*{Architecture Notes}
+This slice uses composition and presentational component extraction rather than
+new domain abstractions. \texttt{Matter} and \texttt{PortalMessage} remain the
+existing data contracts at the UI boundary. No new ADTs or global view models
+were introduced. Actor-model abstractions were not needed: asynchronous side
+effects are limited to \texttt{MessagesView} callbacks and remain explicit
+through \texttt{PortalService}.
+
+\section*{Validation Results}
+\begin{itemize}
+  \item \texttt{dart format} on touched Dart files: passed after an escalated
+  rerun for the shared Flutter cache.
+  \item \texttt{flutter analyze}: passed with no issues.
+  \item \texttt{flutter test}: passed, four tests.
+  \item \texttt{flutter build web}: passed; existing dependency Wasm dry-run
+  warnings from \texttt{desktop\_drop}, \texttt{speech\_to\_text}, and
+  \texttt{image} were reported.
+  \item Touched Dart line counts: 146, 201, 39, 78, 80, 66, and 72 lines.
+  \item Extracted-component usage grep found the new messages components
+  referenced from the messages view and thread composition.
+\end{itemize}
+
+\section*{Remaining Files at or Above 430 Lines}
+\begin{itemize}
+  \item 480: \texttt{lib/app/components/portal/matters\_view.dart}
+  \item 471: \texttt{lib/app/components/ai\_assistant/chat\_area.dart}
+  \item 460: \texttt{lib/app/components/portal/calendar\_view.dart}
+  \item 440: \texttt{lib/app/components/blog/blog\_feed.dart}
+\end{itemize}
+
+\end{document}

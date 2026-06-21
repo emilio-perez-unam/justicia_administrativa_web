@@ -1,0 +1,58 @@
+@startuml
+' Portal messaging slice + dashboard dead-future fixes (Phase 3.C).
+title Portal messaging + dashboard dead-future fix (Phase 3.C)
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "core" {
+  class Result<T> <<sealed>>
+  class "PortalMessage" as PM <<model>>
+  class FutureResultView<T> <<widget>>
+}
+
+package "domains/portal_messaging" {
+  interface PortalMessagingRepository <<port>> {
+    +recentMessages(limit): Future<Result<List<PortalMessage>>>
+  }
+  class LoadRecentMessagesUseCase
+  class PortalServiceMessagingRepository
+  LoadRecentMessagesUseCase --> PortalMessagingRepository
+  PortalServiceMessagingRepository ..|> PortalMessagingRepository
+}
+
+package "core/services" {
+  class PortalService <<static facade>> {
+    +getRecentMessages()
+    +getUpcomingEvents()
+    +getChatMatters()
+    +getMessages(matterId)
+    +sendPortalMessage()
+  }
+  PortalServiceMessagingRepository --> PortalService : delegates
+}
+
+package "lib/app/components/portal" {
+  class DashboardMessagesList <<widget>>
+  class DashboardCalendarWidget <<widget>>
+  class MessagesSidebar <<widget>>
+  class MessagesThreadPanel <<widget>>
+  class MessagesThreadHeader <<widget>>
+
+  DashboardMessagesList --> FutureResultView : recent messages (loader, retryable)
+  DashboardCalendarWidget --> FutureResultView : upcoming events (loader, retryable)
+  MessagesSidebar --> FutureResultView : conversations (mattersLoader)
+  MessagesThreadPanel --> FutureResultView : thread (messagesLoader)
+  MessagesThreadHeader --> FutureResultView : matter title (mattersLoader)
+}
+
+note bottom of DashboardMessagesList
+  Was a dead future: fetched then rendered a
+  hardcoded "Cargando mensajes...". Now renders
+  real data with loading/empty/error+retry.
+end note
+note bottom of DashboardCalendarWidget
+  Same dead-future bug ("Próximas fechas"); now
+  renders real upcoming events with full states.
+end note
+@enduml

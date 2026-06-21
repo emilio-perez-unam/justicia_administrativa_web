@@ -1,0 +1,144 @@
+name: Build and Deploy Production Site
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-site
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: "3.38.9"
+
+jobs:
+  build:
+    name: Verify and build Flutter web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test
+
+      - name: Release build
+        run: flutter build web --release --base-href /
+
+      - name: Assert production bridge exists
+        run: grep -q 'ja_supabase_access_token_b64' build/web/index.html
+
+      - name: Stamp Flutter entrypoint for CDN cache busting
+        run: |
+          set -euo pipefail
+          ver="$(md5sum build/web/main.dart.js | cut -c1-8)"
+          sed -i "s|main\.dart\.js|main.dart.js?v=${ver}|g" build/web/flutter_bootstrap.js
+          grep -q "main.dart.js?v=${ver}" build/web/flutter_bootstrap.js
+          echo "MAIN_DART_JS_VERSION=${ver}" >> "$GITHUB_ENV"
+
+      - name: Disable Jekyll processing
+        run: touch build/web/.nojekyll
+
+      - name: Summarize artifact
+        run: |
+          set -euo pipefail
+          du -sh build/web
+          find build/web -type f -print0 | sort -z | xargs -0 sha256sum > build/web/SHA256SUMS.txt
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: justicia-administrativa-web
+          path: build/web
+          if-no-files-found: error
+          retention-days: 30
+
+  deploy:
+    name: Deploy to production host
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production
+      url: https://www.justiciadministrativa.com/
+    steps:
+      - name: Download release artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: justicia-administrativa-web
+          path: build/web
+
+      - name: Require deployment secrets
+        run: |
+          test -n "${{ secrets.PRODUCTION_HOST }}"
+          test -n "${{ secrets.PRODUCTION_USER }}"
+          test -n "${{ secrets.PRODUCTION_SSH_KEY }}"
+
+      - name: Configure SSH
+        run: |
+          set -euo pipefail
+          port="${{ secrets.PRODUCTION_PORT }}"
+          port="${port:-22}"
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.PRODUCTION_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "$port" "${{ secrets.PRODUCTION_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
+      - name: Backup current production files
+        run: |
+          set -euo pipefail
+          port="${{ secrets.PRODUCTION_PORT }}"
+          port="${port:-22}"
+          production_path="${{ secrets.PRODUCTION_PATH }}"
+          production_path="${production_path:-/var/www/new}"
+          backup_root="${{ secrets.PRODUCTION_BACKUP_DIR }}"
+          backup_root="${backup_root:-/var/www/backups}"
+          stamp="$(date -u +%Y%m%d-%H%M%S)"
+          ssh -p "$port" \
+            "${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }}" \
+            "mkdir -p '$backup_root' && cp -a '$production_path' '$backup_root/new-${stamp}'"
+
+      - name: Upload release to production path
+        run: |
+          set -euo pipefail
+          port="${{ secrets.PRODUCTION_PORT }}"
+          port="${port:-22}"
+          production_path="${{ secrets.PRODUCTION_PATH }}"
+          production_path="${production_path:-/var/www/new}"
+          rsync -az --delete --exclude onlyoffice.html \
+            -e "ssh -p $port" \
+            build/web/ "${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }}:${production_path}/"
+
+      - name: Production smoke tests
+        run: |
+          set -euo pipefail
+          curl -fsS https://www.justiciadministrativa.com/ >/dev/null
+          curl -fsS https://www.justiciadministrativa.com/flutter_bootstrap.js >/dev/null
+          code="$(curl -sS -o /dev/null -w '%{http_code}' https://www.justiciadministrativa.com/api/legal-corpus/me)"
+          test "$code" = "401"

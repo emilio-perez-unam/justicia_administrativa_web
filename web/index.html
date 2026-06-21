@@ -18,21 +18,142 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Justicia Administrativa — Especialistas en Derecho Administrativo">
+  <meta name="color-scheme" content="light only">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="justicia_administrativa_web">
+  <meta name="apple-mobile-web-app-title" content="Justicia Administrativa">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>justicia_administrativa_web</title>
+  <title>Justicia Administrativa</title>
   <link rel="manifest" href="manifest.json">
+
+  <!--
+    Production safety: unregister any stale service workers on load. Added to
+    recover clients from cached builds; kept here so a fresh `flutter build web`
+    reproduces production exactly. Caddy also sets no-cache on the Flutter
+    entry files (index.html / flutter_bootstrap.js / flutter_service_worker.js).
+  -->
+  <script>
+    // CACHE CLEARING SCRIPT v2
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister();
+          console.log('Old Service Worker cleared');
+        }
+      });
+    }
+  </script>
+
+  <!--
+    Legal-corpus auth bridge.
+    Mirrors the authenticated Supabase session (sb-*-auth-token in
+    localStorage) into the `ja_supabase_access_token_b64` cookie scoped to
+    /api/legal-corpus, so the Caddy reverse proxy to the RAG FastAPI app can
+    validate the bearer token server-side. Also surfaces a floating
+    "Corpus legal" link on the /portal and /asistente-ia routes when a session
+    is present. Pure DOM/localStorage; no Flutter coupling.
+
+    IMPORTANT: this block is production infrastructure. Do not remove it without
+    also updating the Caddy /api/legal-corpus/* handler and the RAG API.
+  -->
+  <script>
+    (function () {
+      const cookieName = 'ja_supabase_access_token_b64';
+      const corpusUrl = '/api/legal-corpus/';
+
+      function readAccessToken() {
+        try {
+          for (let i = 0; i < localStorage.length; i += 1) {
+            const key = localStorage.key(i);
+            if (!key || !key.startsWith('sb-') || !key.endsWith('-auth-token')) {
+              continue;
+            }
+
+            const raw = localStorage.getItem(key);
+            if (!raw) {
+              continue;
+            }
+
+            const value = JSON.parse(raw);
+            const token =
+              value.access_token ||
+              (value.currentSession && value.currentSession.access_token) ||
+              (value.session && value.session.access_token);
+
+            if (typeof token === 'string' && token.length > 20) {
+              return token;
+            }
+          }
+        } catch (_) {}
+
+        return '';
+      }
+
+      function writeCorpusCookie(token) {
+        const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+        if (!token) {
+          document.cookie =
+            cookieName + '=; Path=/api/legal-corpus; SameSite=Lax; Max-Age=0' + secure;
+          return;
+        }
+
+        const encoded = window.btoa(token).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        document.cookie =
+          cookieName +
+          '=' +
+          encoded +
+          '; Path=/api/legal-corpus; SameSite=Lax; Max-Age=3600' +
+          secure;
+      }
+
+      // The in-app "Corpus Legal" sidebar entry (Flutter) now provides the
+      // link, so this script no longer injects a floating DOM link — it only
+      // mirrors the Supabase session token into the cookie that the
+      // /api/legal-corpus bridge validates.
+      function syncLegalCorpusAccess() {
+        writeCorpusCookie(readAccessToken());
+      }
+
+      try {
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = function () {
+          const result = originalSetItem.apply(this, arguments);
+          window.setTimeout(syncLegalCorpusAccess, 0);
+          return result;
+        };
+
+        const originalRemoveItem = localStorage.removeItem;
+        localStorage.removeItem = function () {
+          const result = originalRemoveItem.apply(this, arguments);
+          window.setTimeout(syncLegalCorpusAccess, 0);
+          return result;
+        };
+      } catch (_) {}
+
+      window.addEventListener('focus', syncLegalCorpusAccess);
+      window.addEventListener('storage', syncLegalCorpusAccess);
+      document.addEventListener('visibilitychange', syncLegalCorpusAccess);
+      window.setInterval(syncLegalCorpusAccess, 3000);
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', syncLegalCorpusAccess);
+      } else {
+        syncLegalCorpusAccess();
+      }
+    })();
+  </script>
 </head>
-<body>
+<body style="background-color: #ffffff;">
+  <script>
+    window.flutterWebRenderer = "canvaskit";
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

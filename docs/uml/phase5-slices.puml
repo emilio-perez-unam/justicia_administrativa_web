@@ -1,0 +1,59 @@
+@startuml
+' Phase 5 remaining slices: portal settings, blog admin (write side),
+' and the in-app legal-corpus launcher.
+title Phase 5 — settings / blog-admin / legal-corpus
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+' external collaborators (declared up front, then referenced by alias)
+class "GoTrue (auth.updateUser)" as GT <<Supabase>>
+class "BlogService.*" as BS <<legacy static>>
+class "Supabase session\n(currentSession != null)" as Sess <<Supabase>>
+
+package "domains/portal_settings" {
+  interface PortalSettingsRepository <<port>>
+  class UpdateProfileUseCase
+  class ChangePasswordUseCase
+  class SupabasePortalSettingsRepository
+  UpdateProfileUseCase --> PortalSettingsRepository
+  ChangePasswordUseCase --> PortalSettingsRepository
+  SupabasePortalSettingsRepository ..|> PortalSettingsRepository
+  SupabasePortalSettingsRepository --> GT
+}
+
+package "domains/blog (write side)" {
+  interface BlogAdminRepository <<port>>
+  class "Load/Create/Update/Delete/\nSetPublished/SetFeatured use cases" as BlogUC
+  class SupabaseBlogAdminRepository
+  BlogUC --> BlogAdminRepository
+  SupabaseBlogAdminRepository ..|> BlogAdminRepository
+  SupabaseBlogAdminRepository --> BS
+}
+
+package "domains/legal_corpus" {
+  interface LegalCorpusGateway <<port>> {
+    +isAvailable: bool
+    +dashboardUrl: Uri
+  }
+  class SupabaseLegalCorpusGateway
+  SupabaseLegalCorpusGateway ..|> LegalCorpusGateway
+  SupabaseLegalCorpusGateway --> Sess
+}
+
+package "presentation" {
+  class SettingsView
+  class BlogAdminView
+  class LegalCorpusLauncher <<sidebar footer>>
+  SettingsView --> UpdateProfileUseCase
+  SettingsView --> ChangePasswordUseCase
+  BlogAdminView --> BlogUC
+  LegalCorpusLauncher --> LegalCorpusGateway : isAvailable? -> launchUrl(dashboardUrl)
+}
+
+note bottom of LegalCorpusLauncher
+  Replaces the index.html-injected floating link.
+  index.html now only mirrors the session token into
+  the cookie the /api/legal-corpus bridge validates.
+end note
+@enduml

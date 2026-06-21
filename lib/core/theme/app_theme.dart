@@ -1,131 +1,103 @@
 import 'package:flutter/material.dart';
-import 'package:justicia_administrativa_web/core/constants/colors.dart';
-import 'package:justicia_administrativa_web/core/constants/typography.dart';
-import 'package:justicia_administrativa_web/core/constants/spacing.dart';
-import 'package:justicia_administrativa_web/core/theme/app_responsive_theme_extension.dart'; // New import
-import 'package:justicia_administrativa_web/core/utils/responsive_utils.dart'; // New import
+import 'package:google_fonts/google_fonts.dart';
+import 'app_colors.dart';
+import 'app_theme_extension.dart';
+import 'app_typography.dart';
 
-/// Main theme configuration for Justicia Administrativa
 class AppTheme {
-  static ThemeData lightTheme(BuildContext context) {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
+  static const Color brandColor = Color(0xFF1E3A8A); // Navy Blue
+  static const Color accentColor = Color(0xFFD4AF37); // Gold
 
-      // Color scheme
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.primaryNavy,
-        secondary: AppColors.accentGold,
-        tertiary: AppColors.techBlue,
-        surface: AppColors.surface,
-        surfaceContainerHighest:
-            AppColors.background, 
-        error: AppColors.error,
-        onPrimary: Colors.white,
-        onSecondary: Colors.white,
-        onSurface: AppColors.textPrimary,
+  static final ThemeData light = ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: brandColor,
+      primary: brandColor,
+      secondary: accentColor,
+      surface: Colors.white,
+      error: const Color(0xFFDC2626),
+    ),
+    fontFamily: GoogleFonts.inter().fontFamily,
+    textTheme: AppTypography.getMainTextTheme(
+      ThemeData(useMaterial3: true).textTheme,
+    ),
+    appBarTheme: AppBarTheme(
+      centerTitle: false,
+      backgroundColor: Colors.white,
+      foregroundColor: brandColor,
+      elevation: 0,
+      titleTextStyle: GoogleFonts.inter(
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: brandColor,
       ),
-
-      // Background colors
-      scaffoldBackgroundColor: AppColors.background,
-
-      // AppBar theme
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.surface,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: const Color(0xFFF8FAFC),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFD6DFEC)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFD6DFEC)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: brandColor, width: 1.2),
+      ),
+    ),
+    chipTheme: ChipThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+      side: const BorderSide(color: Color(0xFFD6DFEC)),
+      backgroundColor: const Color(0xFFF8FAFC),
+      labelStyle: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 12),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
         elevation: 0,
-        centerTitle: false,
-        titleTextStyle: AppTypography.headingMedium(context),
-        iconTheme: const IconThemeData(color: AppColors.primaryNavy),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-
-      // Text theme
-      textTheme: TextTheme(
-        displayLarge: AppTypography.displayLarge(context),
-        displayMedium: AppTypography.displayMedium(context),
-        headlineLarge: AppTypography.headingLarge(context),
-        headlineMedium: AppTypography.headingMedium(context),
-        headlineSmall: AppTypography.headingSmall(context),
-        bodyLarge: AppTypography.bodyLarge(context),
-        bodyMedium: AppTypography.bodyMedium(context),
-        bodySmall: AppTypography.bodySmall(context),
-        labelLarge: AppTypography.button(context),
+    ),
+    extensions: <ThemeExtension>[
+      const AppThemeExtension(
+        background: AppColors.backgroundLight,
+        foreground: AppColors.foregroundLight,
+        card: AppColors.cardLight,
+        cardForeground: AppColors.cardForegroundLight,
+        popover: AppColors.popoverLight,
+        popoverForeground: AppColors.popoverForegroundLight,
+        primary: AppColors.primaryLight,
+        primaryForeground: AppColors.primaryForegroundLight,
+        secondary: AppColors.secondaryLight,
+        secondaryForeground: AppColors.secondaryForegroundLight,
+        muted: AppColors.mutedLight,
+        mutedForeground: AppColors.mutedForegroundLight,
+        accent: AppColors.accentLight,
+        accentForeground: AppColors.accentForegroundLight,
+        destructive: AppColors.destructiveLight,
+        destructiveForeground: AppColors.destructiveForegroundLight,
+        border: AppColors.borderLight,
+        input: AppColors.inputLight,
+        inputBackground: AppColors.inputBackgroundLight,
+        switchBackground: AppColors.switchBackgroundLight,
+        ring: AppColors.ringLight,
+        chart1: AppColors.chart1Light,
+        chart2: AppColors.chart2Light,
+        chart3: AppColors.chart3Light,
+        chart4: AppColors.chart4Light,
+        chart5: AppColors.chart5Light,
+        sidebar: AppColors.sidebarLight,
+        sidebarForeground: AppColors.sidebarForegroundLight,
+        sidebarPrimary: AppColors.sidebarPrimaryLight,
+        sidebarPrimaryForeground: AppColors.sidebarPrimaryForegroundLight,
+        sidebarAccent: AppColors.sidebarAccentLight,
+        sidebarAccentForeground: AppColors.sidebarAccentForegroundLight,
+        sidebarBorder: AppColors.sidebarBorderLight,
+        sidebarRing: AppColors.sidebarRingLight,
       ),
-
-      // Button themes
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryNavy,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.md,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-          ),
-          textStyle: AppTypography.button(context),
-          elevation: 0,
-        ),
-      ),
-
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.techBlue,
-          textStyle: AppTypography.button(context),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-        ),
-      ),
-
-      // Input decoration theme
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.divider),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.divider),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.techBlue, width: 2),
-        ),
-        contentPadding: const EdgeInsets.all(AppSpacing.md),
-      ),
-
-      // Card theme - Fixed: Changed from CardTheme to CardThemeData
-      cardTheme: CardThemeData(
-        color: AppColors.surface,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-          side: const BorderSide(color: AppColors.divider),
-        ),
-        margin: EdgeInsets.zero,
-      ),
-
-      // Divider theme
-      dividerTheme: const DividerThemeData(
-        color: AppColors.divider,
-        thickness: 1,
-        space: AppSpacing.lg,
-      ),
-      // Add AppResponsiveThemeExtension
-      extensions: <ThemeExtension<dynamic>>[
-        AppResponsiveThemeExtension(
-          responsivePagePadding: (ctx) => ctx.responsiveSpacing(AppSpacing.pagePadding),
-          responsiveContentPadding: (ctx) => ctx.responsiveSpacing(AppSpacing.xl),
-          displayLarge: (ctx) => AppTypography.displayLarge(ctx),
-          headingLarge: (ctx) => AppTypography.headingLarge(ctx),
-          bodyLarge: (ctx) => AppTypography.bodyLarge(ctx),
-          button: (ctx) => AppTypography.button(ctx),
-        ),
-      ],
-    );
-  }
+    ],
+  );
 }

@@ -1,0 +1,91 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setmainfont{Latin Modern Roman}
+\setlist[itemize]{leftmargin=1.4em}
+\setlength{\emergencystretch}{2em}
+
+\title{Prompt 08 AI Assistant Chat Refactor}
+\author{Justicia Administrativa Live Site}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section*{Scope Lock}
+Prompt 08 was limited to \texttt{001-apps/001-site/**}. The live
+\texttt{new.justiciadministrativa.com} website continues to be served from
+\texttt{001-apps/001-site}. \texttt{001-apps/002-web} was not modified and
+remains prototype/reference material only. ArgumentaLab, Laravel, Filament,
+\texttt{002-clients/**}, mobile, generated exports, root docs, and root files
+were not modified.
+
+\section*{Prompt 07 Handoff}
+Prompt 07 commit
+\texttt{1190942c59f81730457073e38e1eb513a7227ca8} was present and contained
+only \texttt{001-apps/001-site/**} paths. It split the portal matters view and
+left \texttt{chat\_area.dart} as the longest remaining near-threshold
+live-site Dart file. A later out-of-scope ArgumentaLab commit was already on
+HEAD at the start of Prompt 08 and was not modified.
+
+\section*{AI Chat Ownership Audit}
+\texttt{chat\_area.dart} was selected because it was dirty only with coherent,
+AI-chat-specific, site-local changes. No existing
+\texttt{ai\_assistant/chat/**} files were present, so the extraction could
+proceed without absorbing unrelated site-local work.
+
+\section*{Component Boundaries}
+\begin{itemize}
+  \item \texttt{chat\_area.dart} remains the hook-based public boundary. It
+  owns message state, conversation loading, source restoration, file upload,
+  voice input, send orchestration, drag-and-drop conversion, and scroll
+  behavior.
+  \item \texttt{chat\_message\_list.dart} owns transcript rendering, loading
+  state, empty-state dispatch, and the typing indicator.
+  \item \texttt{chat\_empty\_state.dart} owns the branded welcome state.
+  \item \texttt{chat\_composer.dart} owns attachment chip rendering, text
+  input, upload progress, voice, web-search, and send controls.
+  \item \texttt{chat\_drop\_overlay.dart} owns the drag-and-drop visual
+  affordance.
+\end{itemize}
+
+\section*{UI and Accessibility}
+The refactor preserved the conversation hierarchy, user/assistant bubble
+renderer, loading state, typing copy, attachment chip, upload progress,
+voice/search/send controls, drag overlay, and brand treatment. No new visual
+controls or decorative elements were introduced.
+
+\section*{Architecture Notes}
+This slice uses composition and presentational component extraction rather than
+new domain abstractions. \texttt{Message} remains the existing UI data
+contract, and \texttt{ChatService} plus \texttt{VoiceService} stay behind the
+stateful hook boundary. No new ADTs, repositories, services, or global view
+models were introduced. Actor-model abstractions were not needed: asynchronous
+work is explicit in the chat boundary callbacks and does not require a local
+message actor system.
+
+\section*{Validation Results}
+\begin{itemize}
+  \item \texttt{dart format} on touched Dart files: passed after an escalated
+  run for the shared Flutter cache.
+  \item \texttt{flutter analyze}: passed with no issues after one local const
+  fix in the extracted typing indicator.
+  \item \texttt{flutter test}: passed, four tests.
+  \item \texttt{flutter build web}: passed; existing dependency Wasm dry-run
+  warnings from \texttt{desktop\_drop}, \texttt{speech\_to\_text}, and
+  \texttt{image} were reported.
+  \item Touched Dart line counts: 256, 43, 77, 147, and 51 lines.
+  \item Extracted-component usage grep found the new AI chat components
+  referenced by the chat area composition boundary.
+\end{itemize}
+
+\section*{Remaining Files at or Above 430 Lines}
+\begin{itemize}
+  \item 460: \texttt{lib/app/components/portal/calendar\_view.dart}
+  \item 440: \texttt{lib/app/components/blog/blog\_feed.dart}
+\end{itemize}
+
+\end{document}

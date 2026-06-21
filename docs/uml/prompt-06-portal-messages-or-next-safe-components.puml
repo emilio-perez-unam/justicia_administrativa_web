@@ -1,0 +1,55 @@
+@startuml Prompt06PortalMessagesComponents
+title Prompt 06 Portal Messages Component Split
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "Portal messages" {
+  component "MessagesView\nstate and orchestration boundary" as MessagesView
+  component "MessagesSidebar" as Sidebar
+  component "MessagesEmptyState" as EmptyState
+  component "MessagesThreadPanel" as ThreadPanel
+  component "MessagesThreadHeader" as ThreadHeader
+  component "MessagesComposer" as Composer
+  component "MessageBubble" as Bubble
+}
+
+package "Portal data contracts" {
+  rectangle "Matter" as Matter <<entity>>
+  rectangle "PortalMessage" as PortalMessage <<entity>>
+  component "PortalService" as PortalService
+}
+
+package "App boundaries" {
+  component "AppRouter.authNotifier" as AuthNotifier
+  component "AppThemeExtension" as Theme
+  component "toastification feedback" as Toast
+}
+
+MessagesView --> Sidebar : selected matter callbacks
+MessagesView --> EmptyState : no selected matter
+MessagesView --> ThreadPanel : selected matter thread
+MessagesView --> PortalService : fetch/send/start call
+MessagesView --> AuthNotifier : current user id
+MessagesView --> Toast : error feedback
+
+Sidebar --> Matter : matter list
+Sidebar --> Theme : design tokens
+
+ThreadPanel --> ThreadHeader
+ThreadPanel --> Bubble
+ThreadPanel --> Composer
+ThreadPanel --> PortalMessage : reversed thread stream
+
+ThreadHeader --> Matter : selected matter title
+ThreadHeader --> Theme : design tokens
+ThreadHeader --> MessagesView : call callbacks
+
+Composer --> MessagesView : send callback
+Composer --> Theme : design tokens
+
+Bubble --> PortalMessage : message content and timestamp
+Bubble --> Theme : design tokens
+
+@enduml

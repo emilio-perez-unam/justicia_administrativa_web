@@ -1,0 +1,45 @@
+@startuml
+title Prompt 02 Home View Component Split
+
+skinparam componentStyle rectangle
+
+package "lib/app/views" {
+  component "HomeView" as HomeView
+}
+
+package "lib/app/components" {
+  component "HeroSection" as HeroSection
+  package "home" {
+    component "HomeDualExpertiseSection" as Dual
+    component "HomePreviewCardsSection" as Preview
+  }
+}
+
+package "lib/app/router.dart" {
+  component "AppRouter route constants" as Router
+}
+
+package "lib/core/theme" {
+  component "AppThemeExtension" as Theme
+}
+
+HomeView --> HeroSection : composes
+HomeView --> Dual : composes
+HomeView --> Preview : composes
+Dual --> Theme : reads design tokens
+Dual --> "SectionContainer" : shared section shell
+Preview --> Router : navigates to site routes
+Preview --> "GoRouter" : adapts taps to route changes
+
+note right of HomeView
+Route-level page composition only.
+Section layout now lives in focused
+presentation components.
+end note
+
+note bottom of Preview
+Hover state remains local to each
+preview card; no actor abstraction
+is required for this synchronous UI.
+end note
+@enduml

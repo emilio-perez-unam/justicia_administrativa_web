@@ -22,6 +22,18 @@ cd restored-canonical
 git checkout 6861a2c44de784b5f906915e77f1b1043ea23f56
 ```
 
+Consolidated local bundle:
+
+```text
+/home/emilio/ja-consolidation-001/justicia_administrativa_web-consolidated-9963d2f.bundle
+```
+
+SHA256:
+
+```text
+7ab8a71313397c775f5b95abf13b74c220bbf5fb78ea3372a3d19d8e20d7a2fe
+```
+
 ## Production Rollback
 
 Deployments back up the previous production tree under `/var/www/backups/new-YYYYMMDD-HHMMSS`.

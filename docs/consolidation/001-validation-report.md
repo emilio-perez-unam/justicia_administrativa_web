@@ -50,6 +50,10 @@ Build notes:
 - Deployment-style `main.dart.js` version stamp: `602fedb0`.
 - Release artifact tar stream SHA256: `8ccfbcff306a2220de08c9fc9f4e5cffd62da98b32033767c8e248cef42b7743`.
 - `build/web/index.html` contains the production legal-corpus bridge marker `ja_supabase_access_token_b64`.
+- Local consolidation commit before remote push attempt: `9963d2f62aed4b9416a480b9539df7e7bf2bc186`.
+- Local consolidated bundle: `/home/emilio/ja-consolidation-001/justicia_administrativa_web-consolidated-9963d2f.bundle`.
+- Local consolidated bundle SHA256: `7ab8a71313397c775f5b95abf13b74c220bbf5fb78ea3372a3d19d8e20d7a2fe`.
+- `git bundle verify /home/emilio/ja-consolidation-001/justicia_administrativa_web-consolidated-9963d2f.bundle`: exited 0.
 
 ### Local Release Artifact HTTP Smoke Test
 
@@ -117,4 +121,7 @@ Domain behavior:
 ### Not Verified In This Session
 
 - Browser-executed visual, console, network-panel, viewport, zoom, reduced-motion, high-contrast, and keyboard-navigation checks were not completed because no local Chromium, Google Chrome, or Playwright installation was available in the container.
-- The new GitHub Actions deployment workflow was authored but not remotely executed in this session because production deployment secrets are not visible locally and the obsolete private repository could not be managed through the local `gh` account.
+- `git push origin master` for the canonical repository failed with GitHub 403 because the local GitHub CLI account lacks permission to push to `emilio-perez-unam/justicia_administrativa_web`.
+- Remote execution of `.github/workflows/deploy-production.yml` was not completed because the canonical commit could not be pushed and production deployment secrets are not visible locally.
+- GitHub connector attempts to create remote archive branches failed with GitHub 422 `Reference does not exist`; the exposed connector operation can update existing refs but did not create new refs.
+- The obsolete private repository was not archived or deleted because local `gh` cannot resolve it and the available GitHub connector does not expose repository archive/delete operations.

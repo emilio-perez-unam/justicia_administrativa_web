@@ -22,6 +22,7 @@
 
 - The obsolete repository is no longer treated as a deployment source.
 - Generated artifacts are produced from canonical source by `.github/workflows/deploy-production.yml`.
+- The obsolete repository could not be remotely archived or deleted from this session.
 
 ## Retained From Current Production Source
 
@@ -46,5 +47,7 @@
 ## Blockers
 
 - The local `gh` account cannot clone or administer the private obsolete repository even though the GitHub App can read metadata and files.
+- The local `gh` account cannot push to the canonical repository; `git push origin master` returned GitHub 403.
+- The GitHub connector operation available in this session could not create archive branches; archive-ref attempts returned GitHub 422.
 - DNS/Cloudflare configuration cannot be changed from this session.
 - Production GitHub Actions secrets are not visible from this session; deployment workflow can be created but cannot be proven deployed until secrets are configured or a manual workflow run succeeds.

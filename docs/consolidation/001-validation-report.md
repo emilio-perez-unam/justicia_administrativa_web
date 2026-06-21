@@ -77,6 +77,26 @@ All of these returned HTTP `200`:
 - `/manifest.json`
 - `/favicon.png`
 
+### Clean Clone Verification From Final Bundle
+
+Clean clone source:
+
+```bash
+git clone /home/emilio/ja-consolidation-001/justicia_administrativa_web-final-e9b2bff.bundle /tmp/ja-final-verify
+```
+
+Commands and results:
+
+- `flutter clean`: exited 0.
+- `flutter pub get`: exited 0 with the same discontinued/outdated package notices.
+- `dart format --output=none --set-exit-if-changed .`: exited 0, `243 files (0 changed)`.
+- `flutter analyze`: exited 0, `No issues found!`.
+- `flutter test --reporter compact`: exited 0, `299` tests passed.
+- `flutter build web --release --base-href /`: exited 0 and built `build/web`.
+- Clean-clone deployment-style artifact size: `37M`.
+- Clean-clone `main.dart.js` version stamp: `602fedb0`.
+- Clean-clone release artifact tar stream SHA256: `0395d6861fc527cac39d2525b55e3234b4f28d436d4e328301b4e7c67449a84a`.
+
 ### Production HTTP Smoke Test
 
 All of these returned HTTP `200` from `https://www.justiciadministrativa.com/`:

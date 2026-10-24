@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>JusticIA Workstation v2.2</title>
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: #f1f5f9; }
+        #placeholder { height: 100%; width: 100%; }
+        #error { display:none; padding: 20px; color: #721c24; background: #f8d7da; font-family: sans-serif; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="error">Error al cargar el motor de edicion legal. Verifique su conexion.</div>
+    <div id="placeholder"></div>
+    <script id="scriptApi" src=""></script>
+    <script>
+        let docEditor = null;
+
+        window.addEventListener("message", async function(event) {
+            const data = event.data;
+            
+            if (data.type === "init") {
+                // 1. Obtener Token JWT desde nuestro servidor para validar sesion
+                try {
+                    const response = await fetch("/api/onlyoffice/sign", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data.config)
+                    });
+                    const { token } = await response.json();
+                    
+                    // 2. Inyectar el token en la configuracion
+                    const securedConfig = { ...data.config, token: token };
+                    
+                    // 3. Cargar el script de OnlyOffice
+                    document.getElementById("scriptApi").src = data.apiUrl + "/web-apps/apps/api/documents/api.js";
+                    
+                    const checkScript = setInterval(() => {
+                        if (window.DocsAPI) {
+                            clearInterval(checkScript);
+                            initEditor(securedConfig);
+                        }
+                    }, 100);
+
+                    // Timeout de carga
+                    setTimeout(() => {
+                        if (!docEditor) document.getElementById("error").style.display = "block";
+                    }, 15000);
+
+                } catch (e) {
+                    console.error("Initialization failed:", e);
+                    document.getElementById("error").style.display = "block";
+                }
+            }
+            
+            if (data.type === "executeCommand" && docEditor) {
+                const decodedScript = atob(data.commandB64);
+                docEditor.executeCommand(decodedScript);
+            }
+
+            if (data.type === "getContent" && docEditor) {
+                docEditor.executeMethod("GetText", [], function(text) {
+                    window.parent.postMessage({ type: "contentResult", text: text }, "*");
+                });
+            }
+        });
+
+        function initEditor(config) {
+            try {
+                if (docEditor) docEditor.destroyEditor();
+                docEditor = new DocsAPI.DocEditor("placeholder", {
+                    ...config,
+                    events: {
+                        "onDocumentReady": () => { window.parent.postMessage({ type: "editorReady" }, "*"); },
+                        "onError": (e) => { console.error("OnlyOffice Error:", e); }
+                    }
+                });
+            } catch (e) {
+                document.getElementById("error").style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

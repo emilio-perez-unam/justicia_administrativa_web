@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Corpus jurídico y RAG · Justicia Administrativa</title>
+  <style>
+    :root {
+      --navy: #1e3a8a;
+      --gold: #d4af37;
+      --bg: #f8fafc;
+      --card: #fff;
+      --line: #e2e8f0;
+      --muted: #64748b;
+      --ok: #047857;
+      --bad: #991b1b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 15px/1.5 "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: #0f172a;
+    }
+    header {
+      background: var(--navy);
+      color: #fff;
+      padding: 18px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    header h1 { margin: 0; font-size: 22px; font-family: Georgia, serif; }
+    header p { margin: 2px 0 0; color: #cbd5e1; font-size: 13px; }
+    header a, header button {
+      color: #fff;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 8px;
+      padding: 8px 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .tabs { display: flex; gap: 0; background: #fff; border-bottom: 1px solid var(--line); }
+    .tabs button {
+      flex: 1;
+      padding: 14px;
+      border: 0;
+      background: none;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .tabs button.active { color: var(--navy); box-shadow: inset 0 -3px 0 var(--gold); }
+    main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .card, .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .card .n { font-size: 26px; font-weight: 700; color: var(--navy); }
+    .card .l, .hint { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    .bar { height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+    .bar > span { display: block; height: 100%; background: var(--gold); }
+    .banner { padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; }
+    .banner.err { background: #fef2f2; color: var(--bad); border: 1px solid #fecaca; }
+    .banner.ok { background: #ecfdf5; color: var(--ok); border: 1px solid #a7f3d0; }
+    .banner.warn { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font: inherit;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+    .row > * { flex: 1 1 160px; }
+    button.primary {
+      background: var(--navy);
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
+    tr.sel { background: #fff7e0; }
+    iframe { width: 100%; min-height: 72vh; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .hit { margin-bottom: 12px; }
+    .chip { display: inline-block; padding: 2px 8px; border-radius: 99px; background: #ecfdf5; color: var(--ok); font-size: 12px; margin-right: 6px; }
+    hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="flex:1">
+      <h1>Corpus jurídico y RAG</h1>
+      <p id="sessionLine">Justicia Administrativa · acervo en el servidor justicia</p>
+    </div>
+    <a href="/portal">Portal</a>
+    <a href="/login">Iniciar sesión</a>
+    <button type="button" id="reloadBtn">Actualizar</button>
+  </header>
+  <nav class="tabs">
+    <button class="active" data-tab="resumen">Resumen</button>
+    <button data-tab="docs">Documentos</button>
+    <button data-tab="rag">Consulta RAG</button>
+    <button data-tab="clasica">Vista clásica</button>
+  </nav>
+  <main>
+    <div id="authBox"></div>
+    <section id="resumen">
+      <div id="overviewErr"></div>
+      <div class="grid" id="stats"></div>
+      <div class="panel" style="margin-top:16px">
+        <div class="l">Fuentes</div>
+        <div id="sources"></div>
+      </div>
+    </section>
+    <section id="docs" hidden>
+      <div class="row">
+        <input id="q" placeholder="Buscar título, id o ruta">
+        <select id="source"><option value="">Todas las fuentes</option></select>
+        <select id="avail">
+          <option value="openable">Abribles</option>
+          <option value="missing">Faltantes</option>
+          <option value="all">Todos</option>
+        </select>
+        <button class="primary" id="filterBtn">Filtrar</button>
+      </div>
+      <div id="docsErr"></div>
+      <div class="grid" style="grid-template-columns: 1.4fr .8fr;">
+        <div class="panel" style="overflow:auto">
+          <table>
+            <thead><tr><th>Título</th><th>Fuente</th><th>Tipo</th><th>Tamaño</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <div class="row" style="margin-top:12px">
+            <button type="button" id="prevBtn">Anterior</button>
+            <span id="pageLabel" class="hint"></span>
+            <button type="button" id="nextBtn">Siguiente</button>
+          </div>
+        </div>
+        <div class="panel" id="detail">
+          <div class="l">Detalle</div>
+          <p class="hint">Seleccione un documento para ver metadatos y conversiones.</p>
+        </div>
+      </div>
+    </section>
+    <section id="rag" hidden>
+      <div class="panel">
+        <p class="hint">Búsqueda semántica contra rag-api</p>
+        <textarea id="question" rows="3" placeholder="Ej. amparo contra resolución del TFJA"></textarea>
+        <div class="row">
+          <label><input type="checkbox" id="rerank" checked> Reordenar con Jina</label>
+          <button class="primary" id="searchBtn">Buscar en el RAG</button>
+        </div>
+      </div>
+      <div id="ragErr"></div>
+      <div id="hits"></div>
+    </section>
+    <section id="clasica" hidden>
+      <iframe id="classic" title="Visor clásico del corpus" src="about:blank"></iframe>
+    </section>
+  </main>
+  <script>
+    const state = { page: 1, listing: null };
+
+    function $(id) { return document.getElementById(id); }
+    function fmt(n) { return Number(n || 0).toLocaleString("es-MX"); }
+    function showTab(name) {
+      document.querySelectorAll("main > section").forEach((el) => {
+        el.hidden = el.id !== name;
+      });
+      document.querySelectorAll(".tabs button").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.tab === name);
+      });
+      if (name === "clasica" && $("classic").src === "about:blank") {
+        $("classic").src = "/api/legal-corpus/es/?availability=openable&page_size=25";
+      }
+    }
+    function banner(el, kind, text) {
+      el.innerHTML = text ? `<div class="banner ${kind}">${text}</div>` : "";
+    }
+    function headers() {
+      return { "Accept": "application/json" };
+    }
+    async function getJson(url, opts = {}) {
+      const res = await fetch(url, { credentials: "same-origin", headers: headers(), ...opts });
+      const ctype = res.headers.get("content-type") || "";
+      const text = await res.text();
+      if (ctype.includes("text/html")) {
+        throw new Error(res.ok
+          ? "El puente devolvió HTML en lugar de JSON. Inicie sesión en el portal o publique /api/rag."
+          : `HTTP ${res.status}`);
+      }
+      let data = {};
+      try { data = text ? JSON.parse(text) : {}; } catch { data = { detail: text.slice(0, 240) }; }
+      if (!res.ok) {
+        const detail = data.detail;
+        const msg = typeof detail === "string" ? detail
+          : (detail && detail.category) ? `${detail.error || "error"} (${detail.category})`
+          : (detail && detail.error) ? `${detail.error}`
+          : `HTTP ${res.status}`;
+        const err = new Error(msg);
+        err.status = res.status;
+        throw err;
+      }
+      return data;
+    }
+    function stat(label, value, hint) {
+      return `<div class="card"><div class="l">${label}</div><div class="n">${value}</div><div class="hint">${hint || ""}</div></div>`;
+    }
+    async function loadOverview() {
+      try {
+        const me = await getJson("/api/legal-corpus/me");
+        $("sessionLine").textContent = me.user && me.user.email
+          ? `Sesión ${me.user.email}`
+          : "Sesión autenticada";
+        banner($("authBox"), "ok", "Puente del corpus autenticado.");
+      } catch (e) {
+        banner($("authBox"), e.status === 401 ? "warn" : "err",
+          e.status === 401
+            ? "Inicie sesión en el portal para ver el acervo. El visor usa la misma sesión de Justicia Administrativa."
+            : e.message);
+      }
+      try {
+        const m = await getJson("/api/legal-corpus/metrics");
+        const s = m.summary || {};
+        const c = m.conversions || {};
+        $("stats").innerHTML = [
+          stat("Esperados", fmt(s.expected_items), "Inventario"),
+          stat("Descargados", fmt(s.downloaded_assets), "Activos en disco"),
+          stat("Conversiones", `${fmt(c.current)} / ${fmt(c.required)}`, `${(c.percent || 0).toFixed(1)}%`),
+          stat("Huecos", fmt(s.unclassified_gaps), `${(s.classification_percent || 0).toFixed(1)}% clasificado`),
+        ].join("");
+        $("sources").innerHTML = (m.sources || []).map((src) => {
+          const conv = src.conversion || {};
+          const pct = Number(conv.percent || 0);
+          return `<div style="margin:12px 0"><div style="display:flex;justify-content:space-between"><b>${src.label_es || src.source_id}</b><span class="hint">${fmt(src.assets)} activos</span></div><div class="bar"><span style="width:${Math.max(0, Math.min(100, pct))}%"></span></div><div class="hint">Conversión ${fmt(conv.current)} / ${fmt(conv.required)}</div></div>`;
+        }).join("") || "<p class='hint'>Sin fuentes.</p>";
+        banner($("overviewErr"), "", "");
+        if (!$("classicMini")) {
+          const mini = document.createElement("iframe");
+          mini.id = "classicMini";
+          mini.title = "Vista clásica embebida";
+          mini.src = "/api/legal-corpus/es/";
+          mini.style.cssText = "width:100%;min-height:420px;margin-top:16px;border:1px solid var(--line);border-radius:12px;background:#fff";
+          $("sources").parentElement.after(mini);
+        }
+      } catch (e) {
+        banner($("overviewErr"), "err", e.message);
+      }
+    }
+    async function loadDocs() {
+      const params = new URLSearchParams({
+        availability: $("avail").value,
+        page: String(state.page),
+        page_size: "25",
+      });
+      if ($("q").value.trim()) params.set("q", $("q").value.trim());
+      if ($("source").value) params.set("source_id", $("source").value);
+      try {
+        const listing = await getJson("/api/legal-corpus/assets?" + params.toString());
+        state.listing = listing;
+        const srcSel = $("source");
+        const current = srcSel.value;
+        const opts = ["<option value=''>Todas las fuentes</option>"];
+        (listing.options && listing.options.sources || []).forEach((s) => {
+          const id = s.id || s.source_id || "";
+          const label = s.label_es || s.label_en || id;
+          if (id) opts.push(`<option value="${id}">${label}</option>`);
+        });
+        srcSel.innerHTML = opts.join("");
+        srcSel.value = current;
+        $("rows").innerHTML = (listing.assets || []).map((a, i) => {
+          const title = (a.document && a.document.title) || a.asset_id;
+          return `<tr data-i="${i}"><td>${title}</td><td>${a.source_label_es || a.source_id}</td><td>${a.asset_type_label_es || a.asset_type}</td><td>${a.size_label || a.status}</td></tr>`;
+        }).join("");
+        $("pageLabel").textContent = `${fmt(listing.total)} documentos · página ${listing.page}/${listing.pages}`;
+        banner($("docsErr"), "", "");
+      } catch (e) {
+        banner($("docsErr"), "err", e.message);
+      }
+    }
+    function renderHits(data) {
+      const results = data.results || data.matches || [];
+      if (!results.length) {
+        $("hits").innerHTML = "<div class='panel'>Sin resultados. El índice vectorial puede estar vacío o la clave de embeddings falló.</div>";
+        return;
+      }
+      $("hits").innerHTML = results.map((hit, i) => {
+        const meta = hit.metadata || {};
+        const title = hit.title || meta.title || `Fragmento ${i + 1}`;
+        const text = hit.content || hit.text || hit.chunk_text || "";
+        const score = hit.similarity || hit.score || hit.rerank_score;
+        return `<div class="panel hit"><b>#${i + 1} ${title}</b> ${score != null ? `<span class="chip">${Number(score).toFixed(3)}</span>` : ""}<div class="hint">${meta.source_id || hit.source || ""}</div><p>${text}</p></div>`;
+      }).join("");
+    }
+    async function searchRag() {
+      const question = $("question").value.trim();
+      if (!question) return;
+      $("hits").innerHTML = "<p class='hint'>Consultando…</p>";
+      const payload = {
+        question,
+        top_k: 8,
+        match_threshold: 0.3,
+        jina_profile: "omni",
+        jina_rerank: $("rerank").checked,
+      };
+      const opts = {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      };
+      try {
+        let data;
+        try {
+          data = await getJson("/api/rag/search", opts);
+        } catch (first) {
+          data = await getJson("https://rag.justiciadministrativa.com/search", opts);
+        }
+        renderHits(data);
+        banner($("ragErr"), "", "");
+      } catch (e) {
+        const msg = e.message || "";
+        const billing = /insufficient_balance|jina_insufficient_balance/i.test(msg);
+        banner($("ragErr"), "err",
+          billing
+            ? "La cuenta Jina no tiene saldo. Recargue en https://jina.ai/api-dashboard/key-manager — el corpus se puede seguir consultando en Resumen y Documentos."
+            : msg + " El visor del corpus sí está en línea. La consulta semántica usa Jina omni + reranker-v3.5.");
+        $("hits").innerHTML = "";
+      }
+    }
+    function showDetail(asset) {
+      if (!asset) return;
+      const title = (asset.document && asset.document.title) || asset.asset_id;
+      const conv = (asset.conversions || []).map((c) => {
+        if (!c.openable) return `<span class="chip">${c.label || c.target_format} (${c.status})</span>`;
+        const href = `/api/legal-corpus/corpus/converted?source_id=${encodeURIComponent(asset.source_id)}&asset_id=${encodeURIComponent(asset.asset_id)}&format=${encodeURIComponent(c.target_format)}`;
+        return `<a class="chip" href="${href}" target="_blank">${c.label || c.target_format}</a>`;
+      }).join(" ");
+      const open = asset.openable
+        ? `<p><a class="primary" style="display:inline-block;text-decoration:none" href="/api/legal-corpus/corpus/open?source_id=${encodeURIComponent(asset.source_id)}&asset_id=${encodeURIComponent(asset.asset_id)}" target="_blank">Abrir original</a></p>`
+        : "<p class='hint'>Este activo no está en disco.</p>";
+      $("detail").innerHTML = `<div class="l">Detalle</div><h3 style="color:var(--navy)">${title}</h3><p>${asset.source_label_es || asset.source_id}</p><p class="hint">${asset.asset_id}</p>${open}<div>${conv || "<span class='hint'>Sin conversiones</span>"}</div>`;
+    }
+
+    document.querySelectorAll(".tabs button").forEach((btn) => {
+      btn.addEventListener("click", () => showTab(btn.dataset.tab));
+    });
+    $("reloadBtn").onclick = () => { loadOverview(); loadDocs(); };
+    $("filterBtn").onclick = () => { state.page = 1; loadDocs(); };
+    $("prevBtn").onclick = () => { if (state.page > 1) { state.page -= 1; loadDocs(); } };
+    $("nextBtn").onclick = () => { if (state.listing && state.listing.has_next) { state.page += 1; loadDocs(); } };
+    $("searchBtn").onclick = searchRag;
+    $("rows").addEventListener("click", (ev) => {
+      const tr = ev.target.closest("tr");
+      if (!tr) return;
+      document.querySelectorAll("#rows tr").forEach((row) => row.classList.remove("sel"));
+      tr.classList.add("sel");
+      const asset = (state.listing && state.listing.assets || [])[Number(tr.dataset.i)];
+      showDetail(asset);
+    });
+    loadOverview();
+    loadDocs();
+  </script>
+</body>
+</html>

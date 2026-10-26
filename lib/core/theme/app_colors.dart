@@ -136,4 +136,15 @@ class AppColors {
   static const Color sidebarAccentForegroundDark = Color(0xFFFBFBFB);
   static const Color sidebarBorderDark = Color(0xFF424242);
   static const Color sidebarRingDark = Color(0xFF707070);
+
+  // --- Brand & Semantic Tokens ---
+  // Canonical brand colors; prefer these over raw hex in components.
+  static const Color brandNavy = Color(0xFF1E3A8A);
+  static const Color brandNavyDeep = Color(0xFF10203D);
+  static const Color brandGold = Color(0xFFD4AF37);
+
+  static const Color success = Color(0xFF15803D);
+  static const Color warning = Color(0xFFB45309);
+  static const Color danger = Color(0xFFB91C1C);
+  static const Color info = Color(0xFF1D4ED8);
 }

@@ -119,8 +119,8 @@ class _BrandColumn extends StatelessWidget {
                   ),
                   TextSpan(
                     text: "Administrativa",
-                    style: TextStyle(color: Color(0xFF0D9488)),
-                  ), // Teal
+                    style: TextStyle(color: Color(0xFFD4AF37)),
+                  ), // Brand gold
                 ],
               ),
             ),

@@ -21,6 +21,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   bool _isLoading = false;
   bool _obscurePassword = true;
+  String? _loginError;
 
   final form = FormGroup({
     'email': FormControl<String>(
@@ -53,7 +54,10 @@ class _LoginViewState extends State<LoginView> {
       return;
     }
 
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _loginError = null;
+    });
 
     try {
       final email = form.control('email').value as String;
@@ -63,6 +67,10 @@ class _LoginViewState extends State<LoginView> {
       // Navigation is handled by router redirect
     } catch (e) {
       if (mounted) {
+        setState(
+          () => _loginError =
+              'No se pudo iniciar sesión. Verifica tus credenciales e inténtalo de nuevo.',
+        );
         toastification.show(
           context: context,
           title: const Text('Error de inicio de sesión'),
@@ -189,169 +197,256 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isWide = MediaQuery.sizeOf(context).width >= 860;
+
     return Scaffold(
-      body: Row(
-        children: [
-          // Left Panel (Branding)
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: const Color(0xFF1E3A8A),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      LucideIcons.scale,
-                      size: 64,
-                      color: Color(0xFFD4AF37),
+      body: isWide
+          ? Row(
+              children: [
+                // Left Panel (Branding)
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    color: const Color(0xFF1E3A8A),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            LucideIcons.scale,
+                            size: 64,
+                            color: Color(0xFFD4AF37),
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          "JusticIAdministrativa",
+                          style: TextStyle(
+                            fontFamily:
+                                GoogleFonts.playfairDisplay().fontFamily,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 48),
+                          child: Text(
+                            "Plataforma inteligente de gestión legal y análisis jurídico avanzado.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  Text(
-                    "JusticIAdministrativa",
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.playfairDisplay().fontFamily,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                ),
+
+                // Right Panel (Form)
+                Expanded(flex: 1, child: _buildFormPanel(48)),
+              ],
+            )
+          : Column(
+              children: [
+                // Compact brand header on narrow viewports.
+                Container(
+                  width: double.infinity,
+                  color: const Color(0xFF1E3A8A),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 18,
+                  ),
+                  child: SafeArea(
+                    bottom: false,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          LucideIcons.scale,
+                          size: 22,
+                          color: Color(0xFFD4AF37),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "JusticIAdministrativa",
+                          style: TextStyle(
+                            fontFamily:
+                                GoogleFonts.playfairDisplay().fontFamily,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 48),
-                    child: Text(
-                      "Plataforma inteligente de gestión legal y análisis jurídico avanzado.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                Expanded(child: _buildFormPanel(24)),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildFormPanel(double padding) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(padding),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: _buildLoginForm(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return ReactiveForm(
+      formGroup: form,
+      child: AutofillGroup(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              "Bienvenido",
+              style: TextStyle(
+                fontFamily: GoogleFonts.playfairDisplay().fontFamily,
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF1E3A8A),
               ),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              "Ingresa a tu cuenta para continuar",
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 48),
 
-          // Right Panel (Form)
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 480),
-                padding: const EdgeInsets.all(48),
-                child: ReactiveForm(
-                  formGroup: form,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+            // Email
+            ReactiveTextField(
+              formControlName: 'email',
+              autofillHints: const [AutofillHints.email],
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelText: "Correo Electrónico",
+                prefixIcon: Icon(LucideIcons.mail),
+                border: OutlineInputBorder(),
+              ),
+              validationMessages: {
+                ValidationMessage.required: (_) => 'El correo es requerido',
+                ValidationMessage.email: (_) => 'Ingrese un correo válido',
+              },
+            ),
+            const SizedBox(height: 24),
+
+            // Password
+            ReactiveTextField(
+              formControlName: 'password',
+              obscureText: _obscurePassword,
+              autofillHints: const [AutofillHints.password],
+              decoration: InputDecoration(
+                labelText: "Contraseña",
+                prefixIcon: const Icon(LucideIcons.lock),
+                suffixIcon: IconButton(
+                  tooltip: _obscurePassword
+                      ? 'Mostrar contraseña'
+                      : 'Ocultar contraseña',
+                  icon: Icon(
+                    _obscurePassword ? LucideIcons.eye : LucideIcons.eyeOff,
+                  ),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
+                ),
+                border: const OutlineInputBorder(),
+              ),
+              validationMessages: {
+                ValidationMessage.required: (_) => 'La contraseña es requerida',
+                ValidationMessage.minLength: (_) => 'Mínimo 6 caracteres',
+              },
+              onSubmitted: (_) => _handleLogin(),
+            ),
+
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: _handleForgotPassword,
+                child: const Text("¿Olvidaste tu contraseña?"),
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            if (_loginError != null) ...[
+              Semantics(
+                liveRegion: true,
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDC2626).withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: const Color(0xFFDC2626).withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: Row(
                     children: [
-                      Text(
-                        "Bienvenido",
-                        style: TextStyle(
-                          fontFamily: GoogleFonts.playfairDisplay().fontFamily,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1E3A8A),
-                        ),
+                      const Icon(
+                        LucideIcons.alertTriangle,
+                        size: 18,
+                        color: Color(0xFFDC2626),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Ingresa a tu cuenta para continuar",
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                      const SizedBox(height: 48),
-
-                      // Email
-                      ReactiveTextField(
-                        formControlName: 'email',
-                        decoration: const InputDecoration(
-                          labelText: "Correo Electrónico",
-                          prefixIcon: Icon(LucideIcons.mail),
-                          border: OutlineInputBorder(),
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'El correo es requerido',
-                          ValidationMessage.email: (_) =>
-                              'Ingrese un correo válido',
-                        },
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Password
-                      ReactiveTextField(
-                        formControlName: 'password',
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
-                          labelText: "Contraseña",
-                          prefixIcon: const Icon(LucideIcons.lock),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? LucideIcons.eye
-                                  : LucideIcons.eyeOff,
-                            ),
-                            onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            ),
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'La contraseña es requerida',
-                          ValidationMessage.minLength: (_) =>
-                              'Mínimo 6 caracteres',
-                        },
-                        onSubmitted: (_) => _handleLogin(),
-                      ),
-
-                      const SizedBox(height: 16),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: _handleForgotPassword,
-                          child: const Text("¿Olvidaste tu contraseña?"),
-                        ),
-                      ),
-
-                      const SizedBox(height: 32),
-
-                      FilledButton(
-                        onPressed: _isLoading ? null : _handleLogin,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFFD4AF37),
-                          foregroundColor: const Color(0xFF1E3A8A),
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _loginError!,
+                          style: const TextStyle(
+                            color: Color(0xFFB91C1C),
+                            fontSize: 13,
+                            height: 1.4,
                           ),
                         ),
-                        child: _isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Text("INICIAR SESIÓN"),
                       ),
                     ],
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+            ],
+
+            FilledButton(
+              onPressed: _isLoading ? null : _handleLogin,
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFFD4AF37),
+                foregroundColor: const Color(0xFF1E3A8A),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              child: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Color(0xFF1E3A8A),
+                      ),
+                    )
+                  : const Text("INICIAR SESIÓN"),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -342,7 +342,7 @@ class _ContactFormSectionState extends State<_ContactFormSection> {
                         Checkbox(
                           value: _isUrgent,
                           onChanged: (val) => setState(() => _isUrgent = val!),
-                          activeColor: Colors.blue,
+                          activeColor: navyColor,
                         ),
                         Expanded(
                           child: Text(
@@ -375,30 +375,33 @@ class _ContactFormSectionState extends State<_ContactFormSection> {
                       if (value == null) return;
                       setState(() => _contactMethod = value);
                     },
-                    child: Row(
+                    child: Wrap(
+                      spacing: 24,
+                      runSpacing: 8,
                       children: [
                         InkWell(
                           onTap: () => setState(() => _contactMethod = 'email'),
-                          child: const Row(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Radio<String>(
                                 value: 'email',
-                                activeColor: Colors.blue,
+                                activeColor: navyColor,
                               ),
-                              Text("Correo electrónico"),
+                              const Text("Correo electrónico"),
                             ],
                           ),
                         ),
-                        const SizedBox(width: 24),
                         InkWell(
                           onTap: () => setState(() => _contactMethod = 'phone'),
-                          child: const Row(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Radio<String>(
                                 value: 'phone',
-                                activeColor: Colors.blue,
+                                activeColor: navyColor,
                               ),
-                              Text("Teléfono"),
+                              const Text("Teléfono"),
                             ],
                           ),
                         ),

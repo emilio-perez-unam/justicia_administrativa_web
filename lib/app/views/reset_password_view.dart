@@ -37,6 +37,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   bool _hasRecoverySession = false;
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
+  String? _passwordError;
+  String? _confirmError;
 
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
@@ -112,25 +114,26 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
     final pwd = _passwordController.text;
     final confirm = _confirmController.text;
 
+    setState(() {
+      _passwordError = null;
+      _confirmError = null;
+    });
+
     if (pwd.trim().isEmpty || confirm.trim().isEmpty) {
-      toastification.show(
-        context: context,
-        title: const Text('Campos requeridos'),
-        description: const Text('Por favor completa ambos campos.'),
-        type: ToastificationType.warning,
-        autoCloseDuration: const Duration(seconds: 3),
-      );
+      setState(() {
+        if (pwd.trim().isEmpty) _passwordError = 'Campo requerido.';
+        if (confirm.trim().isEmpty) _confirmError = 'Campo requerido.';
+      });
+      return;
+    }
+
+    if (pwd.length < 8) {
+      setState(() => _passwordError = 'Usa al menos 8 caracteres.');
       return;
     }
 
     if (pwd != confirm) {
-      toastification.show(
-        context: context,
-        title: const Text('Las contraseñas no coinciden'),
-        description: const Text('Verifica que ambas contraseñas sean iguales.'),
-        type: ToastificationType.warning,
-        autoCloseDuration: const Duration(seconds: 3),
-      );
+      setState(() => _confirmError = 'Las contraseñas no coinciden.');
       return;
     }
 
@@ -158,7 +161,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         child: SingleChildScrollView(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 480),
-            padding: const EdgeInsets.all(48),
+            padding: EdgeInsets.all(
+              MediaQuery.sizeOf(context).width < 600 ? 24 : 48,
+            ),
             child: _hasRecoverySession ? _buildForm() : _buildNoSession(),
           ),
         ),
@@ -215,10 +220,20 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           controller: _passwordController,
           obscureText: _obscurePassword,
           enabled: !isUpdating,
+          autofillHints: const [AutofillHints.newPassword],
+          onChanged: (_) {
+            if (_passwordError != null) {
+              setState(() => _passwordError = null);
+            }
+          },
           decoration: InputDecoration(
             labelText: 'Nueva contraseña',
             prefixIcon: const Icon(LucideIcons.lock),
+            errorText: _passwordError,
             suffixIcon: IconButton(
+              tooltip: _obscurePassword
+                  ? 'Mostrar contraseña'
+                  : 'Ocultar contraseña',
               icon: Icon(
                 _obscurePassword ? LucideIcons.eye : LucideIcons.eyeOff,
               ),
@@ -235,10 +250,20 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           controller: _confirmController,
           obscureText: _obscureConfirm,
           enabled: !isUpdating,
+          autofillHints: const [AutofillHints.newPassword],
+          onChanged: (_) {
+            if (_confirmError != null) {
+              setState(() => _confirmError = null);
+            }
+          },
           decoration: InputDecoration(
             labelText: 'Confirmar contraseña',
             prefixIcon: const Icon(LucideIcons.lock),
+            errorText: _confirmError,
             suffixIcon: IconButton(
+              tooltip: _obscureConfirm
+                  ? 'Mostrar contraseña'
+                  : 'Ocultar contraseña',
               icon: Icon(
                 _obscureConfirm ? LucideIcons.eye : LucideIcons.eyeOff,
               ),

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,8 +18,35 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Justicia Administrativa — Especialistas en Derecho Administrativo">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Despacho mexicano especializado en derecho administrativo: defensa contra actos de autoridad, juicio de nulidad, contratación pública y asesoría regulatoria, potenciado con inteligencia artificial.">
+  <meta name="author" content="Justicia Administrativa">
+  <meta name="robots" content="index, follow">
   <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#1E3A8A">
+  <link rel="canonical" href="https://www.justiciadministrativa.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Justicia Administrativa">
+  <meta property="og:title" content="Justicia Administrativa | Derecho Administrativo + Inteligencia Artificial">
+  <meta property="og:description" content="Despacho mexicano especializado en derecho administrativo: defensa contra actos de autoridad, juicio de nulidad, contratación pública y asesoría regulatoria, potenciado con inteligencia artificial.">
+  <meta property="og:url" content="https://www.justiciadministrativa.com/">
+  <meta property="og:image" content="https://www.justiciadministrativa.com/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Justicia Administrativa — Despacho de derecho administrativo y legaltech">
+  <meta property="og:locale" content="es_MX">
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Justicia Administrativa | Derecho Administrativo + Inteligencia Artificial">
+  <meta name="twitter:description" content="Despacho mexicano especializado en derecho administrativo, potenciado con inteligencia artificial.">
+  <meta name="twitter:image" content="https://www.justiciadministrativa.com/og-cover.jpg">
+
+  <!-- Performance: preconnect to runtime backends -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -30,8 +57,86 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>Justicia Administrativa</title>
+  <title>Justicia Administrativa | Derecho Administrativo + Inteligencia Artificial</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Structured data: law firm entity for search engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LegalService",
+        "@id": "https://www.justiciadministrativa.com/#organization",
+        "name": "Justicia Administrativa",
+        "url": "https://www.justiciadministrativa.com/",
+        "logo": "https://www.justiciadministrativa.com/icons/Icon-512.png",
+        "image": "https://www.justiciadministrativa.com/og-cover.jpg",
+        "description": "Despacho mexicano especializado en derecho administrativo: defensa contra actos de autoridad, juicio de nulidad, contratación pública y asesoría regulatoria, potenciado con inteligencia artificial.",
+        "areaServed": "MX",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Ciudad de México",
+          "addressCountry": "MX"
+        },
+        "knowsAbout": [
+          "Derecho administrativo",
+          "Juicio de nulidad",
+          "Contratación pública",
+          "Amparo administrativo",
+          "Responsabilidad patrimonial del Estado",
+          "Derecho digital"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.justiciadministrativa.com/#website",
+        "url": "https://www.justiciadministrativa.com/",
+        "name": "Justicia Administrativa",
+        "inLanguage": "es-MX",
+        "publisher": { "@id": "https://www.justiciadministrativa.com/#organization" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Branded loading splash: removed on flutter-first-frame -->
+  <style>
+    html, body { margin: 0; padding: 0; }
+    body { background-color: #1E3A8A; }
+    #ja-splash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: linear-gradient(160deg, #10203D 0%, #1E3A8A 100%);
+      color: #FFFFFF; font-family: Georgia, 'Times New Roman', serif;
+      transition: opacity 0.35s ease-out;
+    }
+    #ja-splash.ja-splash-done { opacity: 0; pointer-events: none; }
+    #ja-splash img { width: 96px; height: 96px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.35); }
+    #ja-splash .ja-splash-name {
+      margin-top: 24px; font-size: 28px; letter-spacing: 0.4px; font-weight: 700;
+    }
+    #ja-splash .ja-splash-name .ja-ia { color: #D4AF37; }
+    #ja-splash .ja-splash-tag {
+      margin-top: 8px; font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.75); font-family: Arial, Helvetica, sans-serif;
+    }
+    #ja-splash .ja-splash-bar {
+      margin-top: 32px; width: 160px; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,0.18); overflow: hidden;
+    }
+    #ja-splash .ja-splash-bar::after {
+      content: ""; display: block; width: 40%; height: 100%; border-radius: 2px;
+      background: #D4AF37; animation: ja-slide 1.1s ease-in-out infinite;
+    }
+    @keyframes ja-slide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(400%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #ja-splash .ja-splash-bar::after { animation: none; width: 100%; }
+    }
+  </style>
 
   <!--
     Production safety: unregister any stale service workers on load. Added to
@@ -150,7 +255,34 @@
     })();
   </script>
 </head>
-<body style="background-color: #ffffff;">
+<body>
+  <div id="ja-splash" role="status" aria-label="Cargando Justicia Administrativa">
+    <img src="icons/Icon-192.png" alt="Justicia Administrativa">
+    <div class="ja-splash-name">Justic<span class="ja-ia">IA</span></div>
+    <div class="ja-splash-tag">Derecho Administrativo</div>
+    <div class="ja-splash-bar"></div>
+  </div>
+  <noscript>
+    <div style="padding:32px;font-family:Arial,sans-serif;color:#1E3A8A;">
+      Justicia Administrativa requiere JavaScript para funcionar.
+    </div>
+  </noscript>
+  <script>
+    (function () {
+      var splashRemoved = false;
+      function removeSplash() {
+        if (splashRemoved) return;
+        splashRemoved = true;
+        var el = document.getElementById('ja-splash');
+        if (!el) return;
+        el.classList.add('ja-splash-done');
+        window.setTimeout(function () { el.remove(); }, 450);
+      }
+      window.addEventListener('flutter-first-frame', removeSplash);
+      // Fallback: never trap the user behind the splash.
+      window.setTimeout(removeSplash, 15000);
+    })();
+  </script>
   <script>
     window.flutterWebRenderer = "canvaskit";
   </script>

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /portal
+Disallow: /asistente-ia
+Disallow: /reset-password
+Disallow: /api/
+
+Sitemap: https://www.justiciadministrativa.com/sitemap.xml

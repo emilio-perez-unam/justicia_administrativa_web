@@ -12,10 +12,14 @@ class PortalView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClientPortal(
       initialTab: initialTab,
-      onLogout: () {
-        Supabase.instance.client.auth.signOut().then((_) {
-          if (context.mounted) context.go(AppRouter.home);
-        });
+      onLogout: () async {
+        try {
+          await Supabase.instance.client.auth.signOut();
+        } catch (_) {
+          // Best-effort logout: leave the portal even if remote sign-out
+          // fails, so no session data stays visible.
+        }
+        if (context.mounted) context.go(AppRouter.home);
       },
     );
   }

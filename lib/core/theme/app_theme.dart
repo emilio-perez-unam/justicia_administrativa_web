@@ -61,6 +61,25 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      color: Colors.white,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: Color(0xFFE2E8F0)),
+      ),
+    ),
+    dividerTheme: const DividerThemeData(
+      color: Color(0xFFE2E8F0),
+      thickness: 1,
+      space: 1,
+    ),
+    dialogTheme: DialogThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
+    snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(color: brandColor),
     extensions: <ThemeExtension>[
       const AppThemeExtension(
         background: AppColors.backgroundLight,

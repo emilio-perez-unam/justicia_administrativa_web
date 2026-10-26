@@ -12,8 +12,17 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size viewport = MediaQuery.sizeOf(context);
+    // Floor keeps the CTAs and scroll indicator reachable on short
+    // viewports (mobile browser chrome, landscape phones); the parent is a
+    // vertical SingleChildScrollView so the section can grow past it.
+    final double heroHeight = viewport.height < 620 ? 620 : viewport.height;
+    final double headlineSize = viewport.width < 600
+        ? 34
+        : (viewport.width < 1200 ? 44 : 56);
+    final double subheadlineSize = viewport.width < 600 ? 16 : 20;
     return SizedBox(
-      height: MediaQuery.of(context).size.height, // min-h-screen
+      height: heroHeight, // min-h-screen with a usable minimum
       width: double.infinity,
       child: Stack(
         children: [
@@ -92,8 +101,7 @@ class HeroSection extends StatelessWidget {
                                         .fontFamily,
                                     fontWeight: FontWeight.bold,
                                     height: 1.1,
-                                    fontSize:
-                                        56, // Responsive scaling handled by theme if needed, but 56 is good base
+                                    fontSize: headlineSize,
                                   ),
                             )
                             .animate()
@@ -103,8 +111,8 @@ class HeroSection extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // Subheadline
-                        SizedBox(
-                              width: 800,
+                        ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 800),
                               child: Text(
                                 "Con un equipo multidisciplinario conformado por juristas referentes en Iberoamérica y expertos en tecnologías digitales.",
                                 style: Theme.of(context).textTheme.headlineSmall
@@ -114,7 +122,7 @@ class HeroSection extends StatelessWidget {
                                       ),
                                       fontWeight: FontWeight.w300,
                                       height: 1.6,
-                                      fontSize: 20,
+                                      fontSize: subheadlineSize,
                                     ),
                               ),
                             )

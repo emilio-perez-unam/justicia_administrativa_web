@@ -29,12 +29,15 @@ The site is a Flutter web application for Justicia Administrativa.
 
 `web/index.html` intentionally contains:
 
-- product metadata;
+- product metadata (title, description, canonical, Open Graph/Twitter cards, JSON-LD `LegalService` structured data);
+- a branded loading splash (`#ja-splash`) removed on `flutter-first-frame`;
 - stale service-worker cleanup;
 - CanvasKit renderer selection;
 - the legal-corpus auth bridge that mirrors the browser Supabase session into the `ja_supabase_access_token_b64` cookie scoped to `/api/legal-corpus`.
 
 The legal-corpus bridge is production infrastructure and must not be removed without changing the Caddy/RAG bridge.
+
+`web/` also contains crawl/social support files served at the site root: `robots.txt` (auth-only routes disallowed), `sitemap.xml` (public routes), and `og-cover.jpg` (1200x630 social card). Keep `sitemap.xml` in sync with the public route set.
 
 ## Data and Integrations
 
